@@ -4,7 +4,6 @@ import tech.challenge.orderservice.domain.enums.StatusPagamento
 import tech.challenge.orderservice.domain.enums.StatusPedido
 import java.math.BigDecimal
 import java.time.LocalDateTime
-import java.time.ZoneId
 import java.util.*
 
 data class Pedido(
