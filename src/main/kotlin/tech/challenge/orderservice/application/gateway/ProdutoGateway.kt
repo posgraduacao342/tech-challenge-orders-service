@@ -6,7 +6,7 @@ import tech.challenge.orderservice.application.presenters.mappers.ProdutoMapper
 import tech.challenge.orderservice.domain.entities.Produto
 import tech.challenge.orderservice.domain.enums.Categoria
 import tech.challenge.orderservice.domain.exception.RecursoNaoEncontradoException
-import tech.challenge.orderservice.domain.ports.out.ProdutoAdapterPort
+import tech.challenge.orderservice.domain.ports.out.ProdutoGatewayPort
 import tech.challenge.orderservice.infrastructure.db.repositories.ProdutoRepository
 import java.util.Optional
 import java.util.UUID
@@ -14,7 +14,7 @@ import java.util.UUID
 class ProdutoGateway(
     private val produtoRepository: ProdutoRepository,
     private val produtoMapper: ProdutoMapper
-) : ProdutoAdapterPort {
+) : ProdutoGatewayPort {
 
     @Transactional
     override fun buscarProdutos(): List<Produto> {

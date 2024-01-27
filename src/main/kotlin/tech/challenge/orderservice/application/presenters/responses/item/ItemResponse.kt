@@ -3,9 +3,9 @@ package tech.challenge.orderservice.application.presenters.responses.item
 import java.util.UUID
 
 data class ItemResponse(
-        val id: UUID? = null,
+        var id: UUID? = null,
 
-        val obsevacoes: String? = null,
+        var observacoes: String? = null,
 
-        val quantidade: Int? = null,
+        var quantidade: Int? = null,
 )

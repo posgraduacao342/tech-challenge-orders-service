@@ -1,11 +1,11 @@
 version: '3.7'
 services:
-  account-service:
+  order-service:
     build:
       context: ..
       dockerfile: ./docker/Dockerfile
     image: api
-    container_name: account-service
+    container_name: order-service
     ports:
       - 8080:8080
     restart: always
@@ -13,6 +13,8 @@ services:
       - db
     environment:
       - DB_URL=jdbc:postgresql://db:5432/postgres
+    networks:
+      - orderNetwork
   db:
     image: 'postgres:13.1-alpine'
     container_name: db
@@ -22,3 +24,8 @@ services:
       - POSTGRES_PASSWORD=postgres
     ports:
       - 5432:5432
+    networks:
+      - orderNetwork
+networks:
+    orderNetwork:
+      driver: bridge

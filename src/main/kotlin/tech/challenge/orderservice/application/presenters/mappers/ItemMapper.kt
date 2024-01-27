@@ -1,12 +1,13 @@
 package tech.challenge.orderservice.application.presenters.mappers
 
+import org.springframework.beans.BeanUtils
 import org.springframework.stereotype.Component
 import tech.challenge.orderservice.application.presenters.requests.item.CriarItemRequest
+import tech.challenge.orderservice.application.presenters.responses.item.ItemResponse
 import tech.challenge.orderservice.domain.entities.Item
 import tech.challenge.orderservice.domain.entities.Pedido
 import tech.challenge.orderservice.domain.entities.Produto
 import tech.challenge.orderservice.infrastructure.db.entity.ItemEntity
-import tech.challenge.orderservice.infrastructure.db.entity.PedidoEntity
 import tech.challenge.orderservice.infrastructure.db.entity.ProdutoEntity
 
 @Component
@@ -18,7 +19,6 @@ class ItemMapper(
     fun toEntity(item: Item?): ItemEntity? {
         val itemEntity = itemGenericMapper.toTransform(item, ItemEntity::class.java)
         itemEntity?.produto = itemGenericMapper.toTransform(item?.produto, ProdutoEntity::class.java)
-        itemEntity?.pedido = itemGenericMapper.toTransform(item?.pedido, PedidoEntity::class.java)
 
         return itemEntity
     }
@@ -40,7 +40,6 @@ class ItemMapper(
         pedido.id = request.pedidoId
 
         item.produto = produto
-        item.pedido = pedido
         item.observacoes = request.observacoes
         item.quantidade = request.quantidade
 
@@ -61,5 +60,11 @@ class ItemMapper(
             toEntity(item)?.let { itensEntity.add(it) }
         }
         return itensEntity
+    }
+
+    fun toResponse(item: Item): ItemResponse {
+        val itemResponse = ItemResponse()
+        BeanUtils.copyProperties(item, itemResponse)
+        return itemResponse
     }
 }

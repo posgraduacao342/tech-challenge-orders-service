@@ -5,7 +5,7 @@ import tech.challenge.orderservice.domain.enums.Categoria
 import tech.challenge.orderservice.domain.exception.RecursoNaoEncontradoException
 import java.util.*
 
-interface ProdutoAdapterPort {
+interface ProdutoGatewayPort {
     fun buscarProdutos(): List<Produto>
 
     @Throws(RecursoNaoEncontradoException::class)

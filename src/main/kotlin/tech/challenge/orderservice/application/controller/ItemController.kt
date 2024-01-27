@@ -3,6 +3,7 @@ package tech.challenge.orderservice.application.controller
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import tech.challenge.orderservice.application.presenters.mappers.GenericMapper
+import tech.challenge.orderservice.application.presenters.mappers.ItemMapper
 import tech.challenge.orderservice.application.presenters.requests.item.AtualizarObservacaoItemRequest
 import tech.challenge.orderservice.application.presenters.responses.item.ItemResponse
 import tech.challenge.orderservice.domain.entities.Item
@@ -13,7 +14,7 @@ import java.util.*
 @RequestMapping("/itens")
 class ItemController(
     private val itemUseCases: ItemUseCasesPort,
-    private val itemGenericMapper: GenericMapper
+    private val itemMapper: ItemMapper
 ) {
     @GetMapping("/porPedido/{pedidoId}")
     fun buscarItensPorPedido(@PathVariable pedidoId: UUID): ResponseEntity<MutableList<Item?>> {
@@ -28,8 +29,7 @@ class ItemController(
     }
 
     @PatchMapping(value = ["/observacao"])
-    fun atualizarObservacao(@RequestBody itemRequestPatch: List<AtualizarObservacaoItemRequest>): List<ItemResponse?> {
-        val itens = itemGenericMapper.toTransformList(itemRequestPatch, Item::class.java)
-        return itemGenericMapper.toTransformList(itemUseCases.atualizarObservacao(itens), ItemResponse::class.java)
+    fun atualizarObservacao(@RequestBody request: AtualizarObservacaoItemRequest): ItemResponse? {
+        return itemMapper.toResponse(itemUseCases.atualizarObservacao(request.id, request.observacoes))
     }
 }

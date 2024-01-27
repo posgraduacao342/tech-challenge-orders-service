@@ -10,39 +10,39 @@ import java.util.UUID
 @Entity
 @Table(name = "pedidos")
 data class PedidoEntity(
-        @Column
-        @Enumerated(EnumType.STRING)
-        var statusPedido: StatusPedido?,
+    @Column
+    @Enumerated(EnumType.STRING)
+    var statusPedido: StatusPedido?,
 
-        @Column
-        @Enumerated(EnumType.STRING)
-        var statusPagamento: StatusPagamento?,
+    @Column
+    @Enumerated(EnumType.STRING)
+    var statusPagamento: StatusPagamento?,
 
-        @OneToMany(mappedBy = "pedido", cascade = [CascadeType.ALL])
-        var itens: MutableList<ItemEntity> = mutableListOf(),
+    @OneToMany(mappedBy = "pedido", cascade = [CascadeType.ALL])
+    var itens: MutableList<ItemEntity> = mutableListOf(),
 
-        @Column(nullable = false)
-        var preco: BigDecimal?,
+    @Column(nullable = false)
+    var preco: BigDecimal?,
 
-        @Column
-        var dataRecebimento: LocalDateTime?,
+    @Column
+    var dataRecebimento: LocalDateTime?,
 
-        @JoinColumn(name = "id_cliente")
-        var cliente: UUID?,
+    @Column
+    var idCliente: UUID?,
 
-        ) : BaseEntity() {
+    ) : BaseEntity() {
 
     override fun toString(): String {
         return "PedidoEntity{id=${super.id}}"
     }
 
     constructor() : this(
-            statusPedido = null,
-            statusPagamento = null,
-            itens = mutableListOf(),
-            preco = null,
-            dataRecebimento = null,
-            cliente = null
+        statusPedido = null,
+        statusPagamento = null,
+        itens = mutableListOf(),
+        preco = null,
+        dataRecebimento = null,
+        idCliente = null
     )
 
     fun adicionarItem(item: ItemEntity) {

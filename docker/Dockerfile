@@ -1,4 +1,4 @@
-FROM maven:3.8.4-openjdk-21-slim AS builder
+FROM maven:latest AS builder
 
 WORKDIR /app
 
@@ -8,7 +8,7 @@ RUN mvn dependency:go-offline
 COPY src/ /app/src/
 RUN mvn package -DskipTests
 
-FROM openjdk:21-jdk-alpine
+FROM openjdk:17-jdk-alpine
 
 WORKDIR /app
 

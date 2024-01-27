@@ -6,9 +6,9 @@ import java.util.UUID
 
 data class CriarPedidoRequest(
 
-        val idCliente: UUID? = null,
+        var idCliente: UUID? = null,
 
-        val preco: BigDecimal? = null,
+        var preco: BigDecimal? = null,
 
-        val itens: List<ItensRequest>? = null,
+        var itens: List<ItensRequest>? = null,
 )

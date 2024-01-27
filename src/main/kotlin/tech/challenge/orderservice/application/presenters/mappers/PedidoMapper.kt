@@ -16,15 +16,8 @@ import tech.challenge.orderservice.infrastructure.db.entity.ProdutoEntity
 class PedidoMapper(
         private val genericMapper: GenericMapper
 ) {
-
     fun toDomain(pedidoRequest: CriarPedidoRequest): Pedido {
         val pedido = Pedido()
-
-//        if (pedidoRequest.idCliente != null) {
-//            val cliente = Cliente()
-//            cliente.id = pedidoRequest.idCliente
-//            pedido.cliente = cliente
-//        }
 
         pedidoRequest.itens?.forEach { itensRequest ->
             val item = Item()
@@ -40,7 +33,7 @@ class PedidoMapper(
         return pedido
     }
 
-    fun toDomain(pedidoEntity: PedidoEntity): Pedido? {
+    fun toDomain(pedidoEntity: PedidoEntity): Pedido {
         val pedido = genericMapper.toTransform(pedidoEntity, Pedido::class.java)
         pedidoEntity.itens.forEach { itemEntity ->
             val item = genericMapper.toTransform(itemEntity, Item::class.java)
@@ -51,21 +44,11 @@ class PedidoMapper(
             }
         }
 
-//        if (pedidoEntity.cliente != null) {
-//            val cliente = genericMapper.toTransform(pedidoEntity.cliente, Cliente::class.java)
-//            pedido?.cliente = cliente
-//        }
-
-        return pedido
+        return pedido!!
     }
 
     fun toEntity(pedido: Pedido): PedidoEntity {
         val pedidoEntity = PedidoEntity()
-
-//        if (pedido.cliente != null) {
-//            val clienteEntity = ClienteEntity()
-//            pedidoEntity.cliente = genericMapper.toTransform(pedido.cliente, clienteEntity.javaClass)
-//        }
 
         BeanUtils.copyProperties(pedido, pedidoEntity)
 
@@ -94,11 +77,7 @@ class PedidoMapper(
             pedidoResponse.adicionarItem(itemResponse)
         }
 
-//        pedido.cliente?.let { cliente ->
-//            pedidoResponse.clienteId = cliente.id
-//        }
-
-        if(pedido.cliente != null) {
+        if(pedido.idCliente != null) {
             pedidoResponse.clienteId = pedido.id
         }
 

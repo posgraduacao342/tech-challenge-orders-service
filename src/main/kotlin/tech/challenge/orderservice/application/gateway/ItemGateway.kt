@@ -1,11 +1,9 @@
 package tech.challenge.orderservice.application.gateway
 
 import org.springframework.stereotype.Component
-import tech.challenge.orderservice.application.presenters.mappers.GenericMapper
 import tech.challenge.orderservice.application.presenters.mappers.ItemMapper
-import tech.challenge.orderservice.application.presenters.requests.item.AtualizarItemRequest
 import tech.challenge.orderservice.domain.entities.Item
-import tech.challenge.orderservice.domain.ports.out.ItemAdapterPort
+import tech.challenge.orderservice.domain.ports.out.ItemGatewayPort
 import tech.challenge.orderservice.infrastructure.db.entity.ItemEntity
 import tech.challenge.orderservice.infrastructure.db.repositories.ItemRepository
 import java.util.*
@@ -14,9 +12,8 @@ import java.util.stream.Collectors
 @Component
 class ItemGateway(
     private val itemRepository: ItemRepository,
-    private val itemMapper: ItemMapper,
-    private val itemGenericMapper: GenericMapper
-) : ItemAdapterPort {
+    private val itemMapper: ItemMapper
+) : ItemGatewayPort {
 
     override fun salvarItem(item: Item?): Item? {
         val itemEntity = itemMapper.toEntity(item)
@@ -24,12 +21,9 @@ class ItemGateway(
         return savedItemEntity?.let { itemMapper.toDomain(it) }
     }
 
-    override fun atualizarItem(itemId: UUID, request: AtualizarItemRequest): Item {
+    override fun atualizarObervacoes(itemId: UUID, observacoes: String): Item {
         val itemEntity = itemRepository.findById(itemId)
-
-        request.observacoes?.let { itemEntity.get().observacoes = it }
-        request.quantidade?.let { itemEntity.get().quantidade = it }
-
+        itemEntity.get().observacoes = observacoes
         val updatedItemEntity = itemRepository.save(itemEntity.get())
         return itemMapper.toDomain(updatedItemEntity)!!
     }
@@ -40,7 +34,6 @@ class ItemGateway(
 
     override fun buscarItensPorPedido(pedidoId: UUID): MutableList<Item?>? {
         val itemEntities = itemRepository.findByPedidoId(pedidoId)
-
         return itemEntities.stream()
             .map(itemMapper::toDomain)
             .collect(Collectors.toList())

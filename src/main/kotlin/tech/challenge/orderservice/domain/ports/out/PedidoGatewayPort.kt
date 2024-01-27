@@ -6,7 +6,7 @@ import tech.challenge.orderservice.domain.entities.Pedido
 import tech.challenge.orderservice.domain.enums.StatusPedido
 import java.util.*
 
-interface PedidoAdapterPort {
+interface PedidoGatewayPort {
     fun buscarPedidos(sortingProperty: Optional<PedidoSortingOptions>, direction: Optional<Sort.Direction>): List<Pedido>
 
     fun buscarPedidosPorStatusPedido(

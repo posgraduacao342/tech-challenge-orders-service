@@ -1,12 +1,11 @@
 package tech.challenge.orderservice.domain.ports.out
 
-import tech.challenge.orderservice.application.presenters.requests.item.AtualizarItemRequest
 import tech.challenge.orderservice.domain.entities.Item
 import java.util.*
 
-interface ItemAdapterPort {
+interface ItemGatewayPort {
     fun salvarItem(item: Item?): Item?
-    fun atualizarItem(itemId: UUID, request: AtualizarItemRequest): Item
+    fun atualizarObervacoes(itemId: UUID, observacoes: String): Item
     fun deletarItem(itemId: UUID?)
     fun buscarItensPorPedido(pedidoId: UUID): MutableList<Item?>?
     fun deletarItensPorPedido(pedidoId: UUID?)

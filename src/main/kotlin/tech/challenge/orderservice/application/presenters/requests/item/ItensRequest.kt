@@ -3,9 +3,9 @@ package tech.challenge.orderservice.application.presenters.requests.item
 import java.util.*
 
 data class ItensRequest(
-        val produtoId: UUID? = null,
+        var produtoId: UUID? = null,
 
-        val obsevacoes: String? = null,
+        var observacoes: String? = null,
 
-        val quantidade: Int? = null,
+        var quantidade: Int? = null,
 )

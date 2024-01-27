@@ -8,7 +8,7 @@ import org.springframework.data.domain.Sort
 import tech.challenge.orderservice.domain.entities.Pedido
 import tech.challenge.orderservice.domain.enums.StatusPedido
 import tech.challenge.orderservice.domain.exception.RecursoNaoEncontradoException
-import tech.challenge.orderservice.domain.ports.out.PedidoAdapterPort
+import tech.challenge.orderservice.domain.ports.out.PedidoGatewayPort
 import tech.challenge.orderservice.infrastructure.db.entity.PedidoEntity
 import tech.challenge.orderservice.infrastructure.db.repositories.PedidoRepository
 import java.text.MessageFormat
@@ -19,7 +19,7 @@ import kotlin.collections.ArrayList
 class PedidoGateway(
     private val pedidoRepository: PedidoRepository,
     private val pedidoMapper: PedidoMapper
-) : PedidoAdapterPort {
+) : PedidoGatewayPort {
 
     @Transactional
     override fun buscarPedidos(
@@ -42,7 +42,7 @@ class PedidoGateway(
         val pedidos = ArrayList<Pedido>()
 
         for (pedidoEntity in pedidosEntity) {
-            pedidos.add(pedidoMapper.toDomain(pedidoEntity)!!)
+            pedidos.add(pedidoMapper.toDomain(pedidoEntity))
         }
         return pedidos
     }
@@ -57,7 +57,7 @@ class PedidoGateway(
         val pedidos = ArrayList<Pedido>()
 
         for (pedidoEntity in pedidosEntity) {
-            pedidos.add(pedidoMapper.toDomain(pedidoEntity)!!)
+            pedidos.add(pedidoMapper.toDomain(pedidoEntity))
         }
         return pedidos
     }
@@ -78,13 +78,13 @@ class PedidoGateway(
         val pedidoEntity = pedidoRepository.findById(id)
             .orElseThrow { RecursoNaoEncontradoException(MessageFormat.format("Registro não encontrado com código {0}", id)) }
 
-        return Optional.of(pedidoMapper.toDomain(pedidoEntity)!!)
+        return Optional.of(pedidoMapper.toDomain(pedidoEntity))
     }
 
     @Transactional
     override fun salvarPedido(pedido: Pedido): Pedido {
         val pedidoEntity = pedidoMapper.toEntity(pedido)
-        return pedidoMapper.toDomain(pedidoRepository.save(pedidoEntity))!!
+        return pedidoMapper.toDomain(pedidoRepository.save(pedidoEntity))
     }
 
     @Transactional

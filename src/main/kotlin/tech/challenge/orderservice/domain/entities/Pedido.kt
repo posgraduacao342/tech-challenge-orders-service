@@ -7,14 +7,14 @@ import java.time.LocalDateTime
 import java.util.*
 
 data class Pedido(
-        var cliente: UUID? = null,
-        var statusPedido: StatusPedido? = null,
-        var preco: BigDecimal? = null,
-        var statusPagamento: StatusPagamento? = null,
-        var itens: MutableList<Item> = mutableListOf(),
-        var dataRecebimento: LocalDateTime? = null,
+    var idCliente: UUID? = null,
+    var statusPedido: StatusPedido? = null,
+    var preco: BigDecimal? = null,
+    var statusPagamento: StatusPagamento? = null,
+    var itens: MutableList<Item> = mutableListOf(),
+    var dataRecebimento: LocalDateTime? = null,
 
-        ) : BaseEntity() {
+    ) : BaseEntity() {
 
     init {
         this.itens = mutableListOf()

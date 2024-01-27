@@ -9,21 +9,21 @@ import tech.challenge.orderservice.domain.enums.StatusPedido
 import tech.challenge.orderservice.domain.exception.AtributoInvalidoException
 import tech.challenge.orderservice.domain.exception.RecursoNaoEncontradoException
 import tech.challenge.orderservice.domain.ports.`in`.PedidoUseCasesPort
-import tech.challenge.orderservice.domain.ports.out.PedidoAdapterPort
-import tech.challenge.orderservice.domain.ports.out.ProdutoAdapterPort
+import tech.challenge.orderservice.domain.ports.out.PedidoGatewayPort
+import tech.challenge.orderservice.domain.ports.out.ProdutoGatewayPort
 import java.time.LocalDateTime
 import java.time.ZoneId
 
 class PedidoUseCases(
-        private val pedidoAdapterPort: PedidoAdapterPort,
-        private val produtoAdapterPort: ProdutoAdapterPort
+    private val pedidoGatewayPort: PedidoGatewayPort,
+    private val produtoGatewayPort: ProdutoGatewayPort
 ) : PedidoUseCasesPort {
 
     override fun buscarPedidos(
             sortingProperty: Optional<PedidoSortingOptions>,
             direction: Optional<Sort.Direction>
     ): List<Pedido> {
-        return pedidoAdapterPort.buscarPedidos(sortingProperty, direction)
+        return pedidoGatewayPort.buscarPedidos(sortingProperty, direction)
     }
 
     override fun buscarFilaDePedidos(): List<Pedido> {
@@ -31,7 +31,7 @@ class PedidoUseCases(
 
         val orders = listOf(Sort.Order(Sort.Direction.DESC, PedidoSortingOptions.DATA_RECEBIMENTO.string))
 
-        val pedidos = pedidoAdapterPort.buscarPedidosPorStatusPedido(statusPedidoList, Sort.by(orders))
+        val pedidos = pedidoGatewayPort.buscarPedidosPorStatusPedido(statusPedidoList, Sort.by(orders))
         return ordenarPedidosPorStatus(pedidos)
     }
 
@@ -40,7 +40,7 @@ class PedidoUseCases(
     }
 
     override fun buscarPedidoPorId(id: UUID): Pedido {
-        return pedidoAdapterPort.buscarPedidoPorId(id)
+        return pedidoGatewayPort.buscarPedidoPorId(id)
                 .orElseThrow { RecursoNaoEncontradoException("Registro não encontrado com código $id") }
     }
 
@@ -56,7 +56,7 @@ class PedidoUseCases(
         }
 
         val ids = pedido.itens.map { it.produto?.id }
-        val produtos = produtoAdapterPort.buscarProdutoPorIds(ids)
+        val produtos = produtoGatewayPort.buscarProdutoPorIds(ids)
 
         if (produtos.size != pedido.itens.size) {
             throw RecursoNaoEncontradoException("Produto informado não existe!")
@@ -74,17 +74,17 @@ class PedidoUseCases(
             throw AtributoInvalidoException("Preço informado está incorreto!")
         }
 
-        return pedidoAdapterPort.salvarPedido(pedido)
+        return pedidoGatewayPort.salvarPedido(pedido)
     }
 
     override fun atualizarStatusPedido(statusPedido: StatusPedido, id: UUID): Pedido {
         val pedido = buscarPedidoPorId(id)
         pedido.dataAtualizacao = LocalDateTime.now(ZoneId.of("UTC"))
         pedido.statusPedido = statusPedido
-        return pedidoAdapterPort.salvarPedido(pedido)
+        return pedidoGatewayPort.salvarPedido(pedido)
     }
 
     override fun deletarPedido(id: UUID) {
-        pedidoAdapterPort.deletarPedido(id)
+        pedidoGatewayPort.deletarPedido(id)
     }
 }

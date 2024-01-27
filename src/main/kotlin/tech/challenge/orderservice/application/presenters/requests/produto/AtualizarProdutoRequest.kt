@@ -4,9 +4,9 @@ import tech.challenge.orderservice.domain.enums.Categoria
 import java.math.BigDecimal
 
 data class AtualizarProdutoRequest(
-        val nome: String? = null,
-        val preco: BigDecimal? = null,
-        val imagem: String? = null,
-        val descricao: String? = null,
-        val categoria: Categoria? = null,
+        var nome: String? = null,
+        var preco: BigDecimal? = null,
+        var imagem: String? = null,
+        var descricao: String? = null,
+        var categoria: Categoria? = null,
 )
