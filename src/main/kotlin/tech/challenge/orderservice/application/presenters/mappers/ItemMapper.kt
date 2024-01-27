@@ -12,7 +12,6 @@ import tech.challenge.orderservice.infrastructure.db.entity.ProdutoEntity
 
 @Component
 class ItemMapper(
-        private val produtoMapper: ProdutoMapper,
         private val itemGenericMapper: GenericMapper
 ) {
 
