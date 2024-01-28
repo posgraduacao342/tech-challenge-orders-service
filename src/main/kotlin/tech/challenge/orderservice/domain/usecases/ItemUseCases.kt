@@ -9,7 +9,7 @@ class ItemUseCases(
     private val itemGateway: ItemGatewayPort
 ) : ItemUseCasesPort {
 
-    override fun buscarItensPorPedido(pedidoId: UUID): MutableList<Item?>? {
+    override fun buscarItensPorPedido(pedidoId: UUID): MutableList<Item>? {
         return itemGateway.buscarItensPorPedido(pedidoId)
     }
 

@@ -32,7 +32,7 @@ class ItemGateway(
         itemRepository.deleteById(itemId!!)
     }
 
-    override fun buscarItensPorPedido(pedidoId: UUID): MutableList<Item?>? {
+    override fun buscarItensPorPedido(pedidoId: UUID): MutableList<Item>? {
         val itemEntities = itemRepository.findByPedidoId(pedidoId)
         return itemEntities.stream()
             .map(itemMapper::toDomain)

@@ -2,7 +2,6 @@ package tech.challenge.orderservice.application.controller
 
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import tech.challenge.orderservice.application.presenters.mappers.GenericMapper
 import tech.challenge.orderservice.application.presenters.mappers.ItemMapper
 import tech.challenge.orderservice.application.presenters.requests.item.AtualizarObservacaoItemRequest
 import tech.challenge.orderservice.application.presenters.responses.item.ItemResponse
@@ -17,7 +16,7 @@ class ItemController(
     private val itemMapper: ItemMapper
 ) {
     @GetMapping("/porPedido/{pedidoId}")
-    fun buscarItensPorPedido(@PathVariable pedidoId: UUID): ResponseEntity<MutableList<Item?>> {
+    fun buscarItensPorPedido(@PathVariable pedidoId: UUID): ResponseEntity<MutableList<Item>> {
         val items = itemUseCases.buscarItensPorPedido(pedidoId)
         return ResponseEntity.ok(items)
     }

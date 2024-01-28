@@ -4,11 +4,11 @@ import java.math.BigDecimal
 import java.util.*
 
 data class Item(
-        var id: UUID? = null,
-        var produto: Produto? = null,
-        var pedido: Pedido? = null,
-        var observacoes: String? = null,
-        var quantidade: Int = 0
+    var id: UUID? = null,
+    var produto: Produto? = null,
+    var pedido: Pedido? = null,
+    var observacoes: String? = null,
+    var quantidade: Int = 0
 ) {
     fun calcularTotal(): BigDecimal {
         val quantidadeDecimal = BigDecimal.valueOf(quantidade.toLong())
