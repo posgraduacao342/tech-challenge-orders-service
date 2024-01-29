@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-@OpenAPIDefinition(info = Info(title = "Tech Challenge - Account Service", version = "1.0"))
+@OpenAPIDefinition(info = Info(title = "Tech Challenge - Order Service", version = "1.0"))
 @SecurityScheme(name = "javainuseapi", scheme = "basic", type = SecuritySchemeType.HTTP, `in` = SecuritySchemeIn.HEADER)
 class OrderServiceApplication
 
