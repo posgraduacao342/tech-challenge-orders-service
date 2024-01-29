@@ -44,9 +44,9 @@ jobs:
         run: docker-compose up --build
         
       - name: Set up Docker Compose
-        uses: docker/compose-action@v3
+        uses: docker/compose-action@v2
         with:
-          compose-file: ./docker/docker-compose.yml
+          compose-file: ./docker-compose.yml
           
       - name: Build
         run: docker-compose up --build
