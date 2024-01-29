@@ -36,14 +36,6 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
         
-      - name: Set up Docker Compose
-        uses: docker/compose-action@v3
-        with:
-          compose-file: ./docker/docker-compose.yml
-          
-      - name: Build
-        run: docker-compose up --build
-        
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
