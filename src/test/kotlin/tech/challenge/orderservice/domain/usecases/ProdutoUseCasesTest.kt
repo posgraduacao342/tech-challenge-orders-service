@@ -16,7 +16,7 @@ import tech.challenge.orderservice.helpers.AtualizarProdutoHelper
 import tech.challenge.orderservice.helpers.ProdutoHelper
 import java.util.*
 
-class ProdutoUseCase {
+class ProdutoUseCasesTest {
 
     @Mock
     private lateinit var produtoGatewayPort: ProdutoGatewayPort

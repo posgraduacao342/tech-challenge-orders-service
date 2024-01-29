@@ -1,5 +1,6 @@
 package tech.challenge.orderservice.helpers
 
+import tech.challenge.orderservice.application.presenters.requests.pedido.CriarPedidoRequest
 import tech.challenge.orderservice.domain.entities.Pedido
 import tech.challenge.orderservice.domain.enums.StatusPagamento
 import tech.challenge.orderservice.domain.enums.StatusPedido
@@ -33,6 +34,14 @@ class PedidoHelper {
 
         fun gerarListPedidos(): List<Pedido> {
             return mutableListOf(gerarPedido(), gerarPedido())
+        }
+
+        fun gerarPedidoRequest(): CriarPedidoRequest{
+            return CriarPedidoRequest(
+                idCliente = null,
+                preco = null,
+                itens = null
+            )
         }
     }
 }
