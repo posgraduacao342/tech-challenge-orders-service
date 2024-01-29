@@ -10,9 +10,9 @@ class ProdutoHelper {
             return Produto(
                 nome = "Classic Burger",
                 preco = 10.00.toBigDecimal(),
-                imagem = "test",
+                imagem = "hamburguer.jpg",
                 descricao = "Pão, hamburguer, queijo, alface",
-                categoria = Categoria.LANCHE
+                categoria = Categoria.LANCHE,
             )
         }
 

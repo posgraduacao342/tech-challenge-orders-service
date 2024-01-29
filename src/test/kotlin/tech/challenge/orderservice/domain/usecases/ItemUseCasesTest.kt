@@ -1,5 +1,6 @@
 package tech.challenge.orderservice.domain.usecases
 
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.InjectMocks
@@ -27,47 +28,40 @@ class ItemUseCasesTest {
 
     @Test
     fun buscarItensPorPedido_DeveRetornarUmaListaDeItens() {
-        // Given
         val pedidoId = UUID.randomUUID()
         val itemsList = ItemHelper.gerarListItens()
 
-        // Mocking the behavior of itemGateway.buscarItensPorPedido
         `when`(itemGateway.buscarItensPorPedido(pedidoId)).thenReturn(itemsList)
 
-        // When
         val result = itemUseCases.buscarItensPorPedido(pedidoId)
 
-        // Then
-        assert(result == itemsList)
+        Assertions.assertEquals(result, itemsList)
     }
 
     @Test
     fun buscarItem_DeveRetornarUmItem() {
         val pedidoId = UUID.randomUUID()
-        val item = ItemHelper.gerarIten()
+        val item = ItemHelper.gerarItem()
 
-        // Mocking the behavior of itemGateway.buscarItensPorPedido
         `when`(itemGateway.buscarItem(pedidoId)).thenReturn(item)
 
-        // When
         val result = itemUseCases.buscarItem(pedidoId)
 
-        // Then
-        assert(result == item)
+        Assertions.assertEquals(result, item)
     }
 
     @Test
     fun atualizarObservacao_DeveRetornarItemAtualizado(){
         val itemId = UUID.randomUUID()
         val observacao = "Sem carne"
-        val updatedItem = ItemHelper.gerarIten()
+        val updatedItem = ItemHelper.gerarItem()
         updatedItem.observacoes = observacao
 
         `when`(itemGateway.atualizarObervacoes(itemId, observacao)).thenReturn(updatedItem)
 
         val result = itemUseCases.atualizarObservacao(itemId, observacao)
 
-        assert(result == updatedItem)
+        Assertions.assertEquals(result, updatedItem)
     }
 
 }

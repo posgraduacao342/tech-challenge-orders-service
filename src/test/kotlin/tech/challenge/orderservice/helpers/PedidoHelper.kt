@@ -15,7 +15,7 @@ class PedidoHelper {
                 statusPedido = StatusPedido.EM_PREPARACAO,
                 preco = 10.00.toBigDecimal(),
                 statusPagamento = StatusPagamento.AGUARDANDO_PAGAMENTO,
-                itens = ItemHelper.gerarListItens(),
+                itens = ItemHelper.listaItemPadrao(),
                 dataRecebimento = LocalDateTime.now()
             )
         }
@@ -29,6 +29,10 @@ class PedidoHelper {
                 itens = mutableListOf(),
                 dataRecebimento = LocalDateTime.now()
             )
+        }
+
+        fun gerarListPedidos(): List<Pedido> {
+            return mutableListOf(gerarPedido(), gerarPedido())
         }
     }
 }
