@@ -17,6 +17,8 @@
 		<java.version>17</java.version>
 		<junit.version>5.9.3</junit.version>
 		<kotlin.version>1.9.22</kotlin.version>
+		<sonar.organization>posgraduacao342</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 	<dependencies>
 
@@ -141,6 +143,11 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<version>3.2.2</version>
+				<configuration>
+					<systemPropertyVariables>
+						<spring.config.location>${project.build.testOutputDirectory}/../classes/application-test.properties</spring.config.location>
+					</systemPropertyVariables>
+				</configuration>
 			</plugin>
 
 			<plugin>
