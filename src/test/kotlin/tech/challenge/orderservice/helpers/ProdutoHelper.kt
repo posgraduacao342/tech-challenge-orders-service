@@ -16,6 +16,16 @@ class ProdutoHelper {
             )
         }
 
+        fun gerarProduto(produto: Produto): Produto {
+            return Produto(
+                nome = produto.nome,
+                preco = produto.preco,
+                imagem = produto.imagem,
+                descricao = produto.descricao,
+                categoria = produto.categoria,
+            )
+        }
+
         fun gerarListProdutos(): List<Produto> {
             return mutableListOf(gerarProduto())
         }
