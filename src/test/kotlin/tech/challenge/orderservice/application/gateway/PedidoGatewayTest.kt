@@ -35,8 +35,7 @@ class PedidoGatewayTest {
     }
 
     @Test
-    fun `buscarPedidos should return pedidos without sorting`() {
-        // Given
+    fun buscarPedidos_DeveRetornarPedidos() {
         val pedidoEntities = PedidoEntityHelper.gerarListPedidos()
         val pedidos = PedidoHelper.gerarListPedidos()
 
@@ -44,10 +43,8 @@ class PedidoGatewayTest {
         `when`(pedidoMapper.toDomain(pedidoEntities[0])).thenReturn(pedidos[0])
         `when`(pedidoMapper.toDomain(pedidoEntities[1])).thenReturn(pedidos[1])
 
-        // When
         val result = pedidoGateway.buscarPedidos(Optional.empty(), Optional.empty())
 
-        // Then
         verify(pedidoRepository).findAll()
         verify(pedidoMapper).toDomain(pedidoEntities[0])
         verify(pedidoMapper).toDomain(pedidoEntities[1])
@@ -56,8 +53,7 @@ class PedidoGatewayTest {
     }
 
     @Test
-    fun `buscarPedidosPorStatusPedido should return pedidos with sorting`() {
-        // Given
+    fun buscarPedidosPorStatusPedido_DeveRetornarPedidos() {
         val statusPedidoList = listOf(StatusPedido.PRONTO, StatusPedido.EM_PREPARACAO)
         val pedidoEntities = PedidoEntityHelper.gerarListPedidos()
         val pedidos = PedidoHelper.gerarListPedidos()
@@ -67,10 +63,8 @@ class PedidoGatewayTest {
         `when`(pedidoMapper.toDomain(pedidoEntities[0])).thenReturn(pedidos[0])
         `when`(pedidoMapper.toDomain(pedidoEntities[1])).thenReturn(pedidos[1])
 
-        // When
         val result = pedidoGateway.buscarPedidosPorStatusPedido(statusPedidoList, sort)
 
-        // Then
         verify(pedidoRepository).findByStatusPedidoIn(statusPedidoList, sort)
         verify(pedidoMapper).toDomain(pedidoEntities[0])
         verify(pedidoMapper).toDomain(pedidoEntities[1])
@@ -79,7 +73,7 @@ class PedidoGatewayTest {
     }
 
     @Test
-    fun `buscarPedidosPorStatusPedido should return sorted pedidos`() {
+    fun buscarPedidosPorStatusPedido_DeveRetornarPedidosOrdenados() {
         val statusPedidoList = listOf(StatusPedido.PRONTO, StatusPedido.EM_PREPARACAO)
         val sortingProperty = PedidoSortingOptions.DATA_RECEBIMENTO
         val direction = Sort.Direction.ASC
@@ -97,13 +91,11 @@ class PedidoGatewayTest {
         verify(pedidoRepository).findByStatusPedidoIn(statusPedidoList, sort)
         verify(pedidoMapper).toDomain(pedidoEntities[0])
         verify(pedidoMapper).toDomain(pedidoEntities[1])
-
         Assertions.assertEquals(pedidos, result)
     }
 
     @Test
-    fun `buscarPedidoPorId should return pedido when it exists`() {
-        // Given
+    fun buscarPedidoPorId_DeveRetornarPedido() {
         val pedidoId = UUID.randomUUID()
         val pedidoEntity = PedidoEntityHelper.gerarPedido()
         val pedido = PedidoHelper.gerarPedido()
@@ -111,10 +103,8 @@ class PedidoGatewayTest {
         `when`(pedidoRepository.findById(pedidoId)).thenReturn(Optional.of(pedidoEntity))
         `when`(pedidoMapper.toDomain(pedidoEntity)).thenReturn(pedido)
 
-        // When
         val result = pedidoGateway.buscarPedidoPorId(pedidoId)
 
-        // Then
         verify(pedidoRepository).findById(pedidoId)
         verify(pedidoMapper).toDomain(pedidoEntity)
 
@@ -123,7 +113,7 @@ class PedidoGatewayTest {
     }
 
     @Test
-    fun `salvarPedido should save the pedido and return the saved pedido`() {
+    fun salvarPedido_DeveSalvarPedidoERetornar() {
         val pedido = PedidoHelper.gerarPedido()
         val pedidoEntity = PedidoEntityHelper.gerarPedido()
 
