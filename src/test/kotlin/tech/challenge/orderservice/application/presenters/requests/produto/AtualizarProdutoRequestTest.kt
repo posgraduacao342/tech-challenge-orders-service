@@ -20,14 +20,12 @@ class AtualizarProdutoRequestTest {
 
     @Test
     fun atualizarProdutoRequestAtribuindoValores() {
-        // Given
         val nome = "Produto Teste"
         val preco = BigDecimal.valueOf(20.0)
         val imagem = "imagem.jpg"
         val descricao = "Descrição do produto teste"
         val categoria = Categoria.LANCHE
 
-        // When
         val atualizarProdutoRequest = AtualizarProdutoRequest(
             nome = nome,
             preco = preco,
@@ -36,7 +34,6 @@ class AtualizarProdutoRequestTest {
             categoria = categoria
         )
 
-        // Then
         Assertions.assertEquals(nome, atualizarProdutoRequest.nome)
         Assertions.assertEquals(preco, atualizarProdutoRequest.preco)
         Assertions.assertEquals(imagem, atualizarProdutoRequest.imagem)
@@ -46,10 +43,8 @@ class AtualizarProdutoRequestTest {
 
     @Test
     fun atualizarProdutoRequestModificandoValores() {
-        // Given
         val atualizarProdutoRequest = AtualizarProdutoRequest()
 
-        // When
         val novoProdutoRequest = atualizarProdutoRequest.copy(
             nome = "Novo Produto",
             preco = BigDecimal.valueOf(30.0),
@@ -58,7 +53,6 @@ class AtualizarProdutoRequestTest {
             categoria = Categoria.BEBIDA
         )
 
-        // Then
         Assertions.assertEquals("Novo Produto", novoProdutoRequest.nome)
         Assertions.assertEquals(BigDecimal.valueOf(30.0), novoProdutoRequest.preco)
         Assertions.assertEquals("nova-imagem.jpg", novoProdutoRequest.imagem)

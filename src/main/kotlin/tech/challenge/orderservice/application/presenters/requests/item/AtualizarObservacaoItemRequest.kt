@@ -5,7 +5,7 @@ import java.util.UUID
 
 data class AtualizarObservacaoItemRequest(
     @field:NotBlank
-    var id: UUID,
+    var id: UUID? = null,
     @field:NotBlank
-    var observacoes: String
+    var observacoes: String? = null
 )

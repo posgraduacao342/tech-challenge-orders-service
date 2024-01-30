@@ -29,6 +29,6 @@ class ItemController(
 
     @PatchMapping(value = ["/observacao"])
     fun atualizarObservacao(@RequestBody request: AtualizarObservacaoItemRequest): ItemResponse? {
-        return itemMapper.toResponse(itemUseCases.atualizarObservacao(request.id, request.observacoes))
+        return itemMapper.toResponse(itemUseCases.atualizarObservacao(request.id!!, request.observacoes!!))
     }
 }
