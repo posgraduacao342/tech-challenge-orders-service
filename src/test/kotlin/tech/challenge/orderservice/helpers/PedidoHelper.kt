@@ -21,6 +21,17 @@ class PedidoHelper {
             )
         }
 
+        fun gerarPedidoPrecoZerado(): Pedido {
+            return Pedido(
+                idCliente = UUID.randomUUID(),
+                statusPedido = StatusPedido.EM_PREPARACAO,
+                preco = 0.toBigDecimal(),
+                statusPagamento = StatusPagamento.AGUARDANDO_PAGAMENTO,
+                itens = ItemHelper.listaItemPadrao(),
+                dataRecebimento = LocalDateTime.now()
+            )
+        }
+
         fun gerarPedidoComItensVazio(): Pedido {
             return Pedido(
                 idCliente = UUID.randomUUID(),

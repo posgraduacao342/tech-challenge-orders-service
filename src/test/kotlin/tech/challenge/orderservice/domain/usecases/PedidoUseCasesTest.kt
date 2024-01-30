@@ -1,5 +1,6 @@
 package tech.challenge.orderservice.domain.usecases
 
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -10,11 +11,14 @@ import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 import org.springframework.data.domain.Sort
 import tech.challenge.orderservice.domain.enums.PedidoSortingOptions
+import tech.challenge.orderservice.domain.enums.StatusPagamento
 import tech.challenge.orderservice.domain.enums.StatusPedido
+import tech.challenge.orderservice.domain.exception.AtributoInvalidoException
 import tech.challenge.orderservice.domain.exception.RecursoNaoEncontradoException
 import tech.challenge.orderservice.domain.ports.out.PedidoGatewayPort
 import tech.challenge.orderservice.domain.ports.out.ProdutoGatewayPort
 import tech.challenge.orderservice.helpers.PedidoHelper
+import tech.challenge.orderservice.helpers.ProdutoHelper
 import java.util.*
 
 class PedidoUseCasesTest {
@@ -33,6 +37,31 @@ class PedidoUseCasesTest {
     @BeforeEach
     fun setUp() {
         openMocks = MockitoAnnotations.openMocks(this)
+    }
+
+    @Test
+    fun salvarPedido() {
+        val pedido = PedidoHelper.gerarPedidoPrecoZerado()
+        val produto = ProdutoHelper.gerarProduto()
+
+        `when`(produtoGatewayPort.buscarProdutoPorIds(listOf(pedido.id))).thenReturn(listOf(produto))
+        `when`(pedidoGatewayPort.salvarPedido(pedido)).thenReturn(pedido)
+
+        val result = pedidoUseCases.salvarPedido(pedido)
+
+        Assertions.assertEquals(StatusPagamento.AGUARDANDO_PAGAMENTO, result.statusPagamento)
+        Assertions.assertEquals(StatusPedido.EM_PREPARACAO, result.statusPedido)
+    }
+
+    @Test
+    fun salvarPedido_DeveLancarRecursoNaoEncontradoException() {
+        val pedido = PedidoHelper.gerarPedido()
+
+        `when`(produtoGatewayPort.buscarProdutoPorIds(listOf(pedido.id))).thenReturn(emptyList())
+
+        assertThrows<AtributoInvalidoException> {
+            pedidoUseCases.salvarPedido(pedido)
+        }
     }
 
     @Test
