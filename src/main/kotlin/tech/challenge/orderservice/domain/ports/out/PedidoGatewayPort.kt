@@ -9,15 +9,9 @@ import java.util.*
 interface PedidoGatewayPort {
     fun buscarPedidos(sortingProperty: Optional<PedidoSortingOptions>, direction: Optional<Sort.Direction>): List<Pedido>
 
-    fun buscarPedidosPorStatusPedido(
-            statusPedidoList: List<StatusPedido>,
-            sortingProperty: PedidoSortingOptions,
-            direction: Sort.Direction
-    ): List<Pedido>
-
     fun buscarPedidosPorStatusPedido(statusPedidoList: List<StatusPedido>, sort: Sort): List<Pedido>
 
-    fun buscarPedidoPorId(id: UUID): Optional<Pedido>
+    fun buscarPedidoPorId(id: UUID): Pedido?
 
     fun salvarPedido(pedido: Pedido): Pedido
 

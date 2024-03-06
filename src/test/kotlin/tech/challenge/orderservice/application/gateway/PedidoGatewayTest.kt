@@ -1,5 +1,6 @@
 package tech.challenge.orderservice.application.gateway
 
+import jakarta.persistence.EntityManager
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -7,10 +8,7 @@ import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
-import org.springframework.data.domain.Sort
 import tech.challenge.orderservice.application.presenters.mappers.PedidoMapper
-import tech.challenge.orderservice.domain.enums.PedidoSortingOptions
-import tech.challenge.orderservice.domain.enums.StatusPedido
 import tech.challenge.orderservice.helpers.PedidoEntityHelper
 import tech.challenge.orderservice.helpers.PedidoHelper
 import tech.challenge.orderservice.infrastructure.db.repositories.PedidoRepository
@@ -23,6 +21,9 @@ class PedidoGatewayTest {
 
     @Mock
     private lateinit var pedidoMapper: PedidoMapper
+
+    @Mock
+    private lateinit var entityManager: EntityManager
 
     @InjectMocks
     private lateinit var pedidoGateway: PedidoGateway
@@ -53,48 +54,6 @@ class PedidoGatewayTest {
     }
 
     @Test
-    fun buscarPedidosPorStatusPedido_DeveRetornarPedidos() {
-        val statusPedidoList = listOf(StatusPedido.PRONTO, StatusPedido.EM_PREPARACAO)
-        val pedidoEntities = PedidoEntityHelper.gerarListPedidos()
-        val pedidos = PedidoHelper.gerarListPedidos()
-        val sort = Sort.by(Sort.Direction.ASC, "dataPedido")
-
-        `when`(pedidoRepository.findByStatusPedidoIn(statusPedidoList, sort)).thenReturn(pedidoEntities)
-        `when`(pedidoMapper.toDomain(pedidoEntities[0])).thenReturn(pedidos[0])
-        `when`(pedidoMapper.toDomain(pedidoEntities[1])).thenReturn(pedidos[1])
-
-        val result = pedidoGateway.buscarPedidosPorStatusPedido(statusPedidoList, sort)
-
-        verify(pedidoRepository).findByStatusPedidoIn(statusPedidoList, sort)
-        verify(pedidoMapper).toDomain(pedidoEntities[0])
-        verify(pedidoMapper).toDomain(pedidoEntities[1])
-
-        Assertions.assertEquals(pedidos, result)
-    }
-
-    @Test
-    fun buscarPedidosPorStatusPedido_DeveRetornarPedidosOrdenados() {
-        val statusPedidoList = listOf(StatusPedido.PRONTO, StatusPedido.EM_PREPARACAO)
-        val sortingProperty = PedidoSortingOptions.DATA_RECEBIMENTO
-        val direction = Sort.Direction.ASC
-        val sort = Sort.by(direction, sortingProperty.string)
-
-        val pedidoEntities = PedidoEntityHelper.gerarListPedidos()
-        val pedidos = PedidoHelper.gerarListPedidos()
-
-        `when`(pedidoRepository.findByStatusPedidoIn(statusPedidoList, sort)).thenReturn(pedidoEntities)
-        `when`(pedidoMapper.toDomain(pedidoEntities[0])).thenReturn(pedidos[0])
-        `when`(pedidoMapper.toDomain(pedidoEntities[1])).thenReturn(pedidos[1])
-
-        val result = pedidoGateway.buscarPedidosPorStatusPedido(statusPedidoList, sortingProperty, direction)
-
-        verify(pedidoRepository).findByStatusPedidoIn(statusPedidoList, sort)
-        verify(pedidoMapper).toDomain(pedidoEntities[0])
-        verify(pedidoMapper).toDomain(pedidoEntities[1])
-        Assertions.assertEquals(pedidos, result)
-    }
-
-    @Test
     fun buscarPedidoPorId_DeveRetornarPedido() {
         val pedidoId = UUID.randomUUID()
         val pedidoEntity = PedidoEntityHelper.gerarPedido()
@@ -108,8 +67,7 @@ class PedidoGatewayTest {
         verify(pedidoRepository).findById(pedidoId)
         verify(pedidoMapper).toDomain(pedidoEntity)
 
-        Assertions.assertTrue(result.isPresent)
-        Assertions.assertEquals(pedido, result.get())
+        Assertions.assertEquals(pedido, result)
     }
 
     @Test

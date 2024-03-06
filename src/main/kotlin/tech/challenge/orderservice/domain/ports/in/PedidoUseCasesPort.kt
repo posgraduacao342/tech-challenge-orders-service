@@ -10,8 +10,6 @@ import tech.challenge.orderservice.domain.exception.RecursoNaoEncontradoExceptio
 interface PedidoUseCasesPort {
     fun buscarPedidos(sortingProperty: Optional<PedidoSortingOptions>, direction: Optional<Sort.Direction>): List<Pedido>
 
-    fun buscarFilaDePedidos(): List<Pedido>
-
     @Throws(RecursoNaoEncontradoException::class)
     fun buscarPedidoPorId(id: UUID): Pedido
 

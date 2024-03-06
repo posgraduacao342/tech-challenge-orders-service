@@ -1,5 +1,6 @@
 package tech.challenge.orderservice.application.gateway
 
+import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Component
 import tech.challenge.orderservice.application.presenters.mappers.PedidoMapper
@@ -18,7 +19,8 @@ import kotlin.collections.ArrayList
 @Component
 class PedidoGateway(
     private val pedidoRepository: PedidoRepository,
-    private val pedidoMapper: PedidoMapper
+    private val pedidoMapper: PedidoMapper,
+    private val entityManager: EntityManager
 ) : PedidoGatewayPort {
 
     @Transactional
@@ -63,28 +65,20 @@ class PedidoGateway(
     }
 
     @Transactional
-    override fun buscarPedidosPorStatusPedido(
-        statusPedidoList: List<StatusPedido>,
-        sortingProperty: PedidoSortingOptions,
-        direction: Sort.Direction
-    ): List<Pedido> {
-        val sort = Sort.by(direction, sortingProperty.string)
-        return buscarPedidosPorStatusPedido(statusPedidoList, sort)
-    }
-
-    @Transactional
     @Throws(RecursoNaoEncontradoException::class)
-    override fun buscarPedidoPorId(id: UUID): Optional<Pedido> {
+    override fun buscarPedidoPorId(id: UUID): Pedido? {
         val pedidoEntity = pedidoRepository.findById(id)
             .orElseThrow { RecursoNaoEncontradoException(MessageFormat.format("Registro não encontrado com código {0}", id)) }
 
-        return Optional.of(pedidoMapper.toDomain(pedidoEntity))
+        return pedidoMapper.toDomain(pedidoEntity)
     }
 
     @Transactional
     override fun salvarPedido(pedido: Pedido): Pedido {
         val pedidoEntity = pedidoMapper.toEntity(pedido)
-        return pedidoMapper.toDomain(pedidoRepository.save(pedidoEntity))
+        val save = pedidoRepository.saveAndFlush(pedidoEntity)
+        entityManager.refresh(save)
+        return pedidoMapper.toDomain(save)
     }
 
     @Transactional

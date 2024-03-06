@@ -46,7 +46,7 @@ class PedidoResponseTest {
         val dataCriacao = LocalDateTime.now()
         val dataDelecao = LocalDateTime.now()
         val dataAtualizacao = LocalDateTime.now()
-        val statusPedido = StatusPedido.EM_PREPARACAO
+        val statusPedido = StatusPedido.CRIADO
         val preco = BigDecimal.valueOf(100.0)
         val statusPagamento = StatusPagamento.PAGO
         val item = ItemResponse(id = UUID.randomUUID(), observacoes = "Observacao", quantidade = 2)

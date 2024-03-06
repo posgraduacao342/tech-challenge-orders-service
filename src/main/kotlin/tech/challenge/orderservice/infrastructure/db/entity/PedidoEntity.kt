@@ -1,6 +1,7 @@
 package tech.challenge.orderservice.infrastructure.db.entity
 
 import jakarta.persistence.*
+import tech.challenge.orderservice.domain.enums.MetodoPagamento
 import tech.challenge.orderservice.domain.enums.StatusPagamento
 import tech.challenge.orderservice.domain.enums.StatusPedido
 import java.math.BigDecimal
@@ -18,7 +19,7 @@ data class PedidoEntity(
     @Enumerated(EnumType.STRING)
     var statusPagamento: StatusPagamento?,
 
-    @OneToMany(mappedBy = "pedido", cascade = [CascadeType.ALL])
+    @OneToMany(mappedBy = "pedido", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     var itens: MutableList<ItemEntity> = mutableListOf(),
 
     @Column(nullable = false)
@@ -29,6 +30,9 @@ data class PedidoEntity(
 
     @Column
     var idCliente: UUID?,
+
+    @Column(nullable = false)
+    var metodoPagamento: MetodoPagamento?
 
     ) : BaseEntity() {
 
@@ -42,7 +46,8 @@ data class PedidoEntity(
         itens = mutableListOf(),
         preco = null,
         dataRecebimento = null,
-        idCliente = null
+        idCliente = null,
+        metodoPagamento = null
     )
 
     fun adicionarItem(item: ItemEntity) {

@@ -2,6 +2,7 @@ package tech.challenge.orderservice.helpers
 
 import tech.challenge.orderservice.application.presenters.requests.pedido.CriarPedidoRequest
 import tech.challenge.orderservice.domain.entities.Pedido
+import tech.challenge.orderservice.domain.enums.MetodoPagamento
 import tech.challenge.orderservice.domain.enums.StatusPagamento
 import tech.challenge.orderservice.domain.enums.StatusPedido
 import java.time.LocalDateTime
@@ -13,33 +14,36 @@ class PedidoHelper {
         fun gerarPedido(): Pedido {
             return Pedido(
                 idCliente = UUID.randomUUID(),
-                statusPedido = StatusPedido.EM_PREPARACAO,
+                statusPedido = StatusPedido.CRIADO,
                 preco = 10.00.toBigDecimal(),
                 statusPagamento = StatusPagamento.AGUARDANDO_PAGAMENTO,
                 itens = ItemHelper.listaItemPadrao(),
-                dataRecebimento = LocalDateTime.now()
+                dataRecebimento = LocalDateTime.now(),
+                metodoPagamento = MetodoPagamento.DINHEIRO
             )
         }
 
         fun gerarPedidoPrecoZerado(): Pedido {
             return Pedido(
                 idCliente = UUID.randomUUID(),
-                statusPedido = StatusPedido.EM_PREPARACAO,
+                statusPedido = StatusPedido.CRIADO,
                 preco = 0.toBigDecimal(),
                 statusPagamento = StatusPagamento.AGUARDANDO_PAGAMENTO,
                 itens = ItemHelper.listaItemPadrao(),
-                dataRecebimento = LocalDateTime.now()
+                dataRecebimento = LocalDateTime.now(),
+                metodoPagamento = MetodoPagamento.DINHEIRO
             )
         }
 
         fun gerarPedidoComItensVazio(): Pedido {
             return Pedido(
                 idCliente = UUID.randomUUID(),
-                statusPedido = StatusPedido.EM_PREPARACAO,
+                statusPedido = StatusPedido.CRIADO,
                 preco = 10.00.toBigDecimal(),
                 statusPagamento = StatusPagamento.AGUARDANDO_PAGAMENTO,
                 itens = mutableListOf(),
-                dataRecebimento = LocalDateTime.now()
+                dataRecebimento = LocalDateTime.now(),
+                metodoPagamento = MetodoPagamento.DINHEIRO
             )
         }
 
@@ -51,7 +55,8 @@ class PedidoHelper {
             return CriarPedidoRequest(
                 idCliente = null,
                 preco = null,
-                itens = null
+                itens = null,
+                metodoPagamento = null
             )
         }
     }

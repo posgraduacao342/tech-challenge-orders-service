@@ -10,12 +10,14 @@ import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 import org.springframework.data.domain.Sort
+import tech.challenge.orderservice.application.presenters.mappers.PedidoQueueMapper
 import tech.challenge.orderservice.domain.enums.PedidoSortingOptions
 import tech.challenge.orderservice.domain.enums.StatusPagamento
 import tech.challenge.orderservice.domain.enums.StatusPedido
 import tech.challenge.orderservice.domain.exception.AtributoInvalidoException
 import tech.challenge.orderservice.domain.exception.RecursoNaoEncontradoException
 import tech.challenge.orderservice.domain.ports.out.PedidoGatewayPort
+import tech.challenge.orderservice.domain.ports.out.PedidoQueueGatewayPort
 import tech.challenge.orderservice.domain.ports.out.ProdutoGatewayPort
 import tech.challenge.orderservice.helpers.PedidoHelper
 import tech.challenge.orderservice.helpers.ProdutoHelper
@@ -28,6 +30,12 @@ class PedidoUseCasesTest {
 
     @Mock
     private lateinit var produtoGatewayPort: ProdutoGatewayPort
+
+    @Mock
+    private lateinit var pedidoQueueGatewayPort: PedidoQueueGatewayPort
+
+    @Mock
+    private lateinit var pedidoQueueMapper: PedidoQueueMapper
 
     @InjectMocks
     private lateinit var pedidoUseCases: PedidoUseCases
@@ -50,7 +58,7 @@ class PedidoUseCasesTest {
         val result = pedidoUseCases.salvarPedido(pedido)
 
         Assertions.assertEquals(StatusPagamento.AGUARDANDO_PAGAMENTO, result.statusPagamento)
-        Assertions.assertEquals(StatusPedido.EM_PREPARACAO, result.statusPedido)
+        Assertions.assertEquals(StatusPedido.CRIADO, result.statusPedido)
     }
 
     @Test
@@ -82,33 +90,11 @@ class PedidoUseCasesTest {
     }
 
     @Test
-    fun buscarFilaDePedidos_DeveRetornarListaDePedidosOrdenada() {
-        // Given
-        val statusPedidoList = listOf(StatusPedido.PRONTO, StatusPedido.EM_PREPARACAO, StatusPedido.RECEBIDO)
-        val pedidos = PedidoHelper.gerarListPedidos()
-        pedidos[0].id = UUID.randomUUID()
-        pedidos[1].id = UUID.randomUUID()
-        pedidos[0].statusPedido = StatusPedido.PRONTO
-        pedidos[1].statusPedido = StatusPedido.EM_PREPARACAO
-
-        // Mocking the behavior of pedidoGatewayPort.buscarPedidosPorStatusPedido
-        `when`(pedidoGatewayPort.buscarPedidosPorStatusPedido(statusPedidoList, Sort.by(Sort.Order(Sort.Direction.DESC, PedidoSortingOptions.DATA_RECEBIMENTO.string))))
-            .thenReturn(pedidos)
-
-        // When
-        val result = pedidoUseCases.buscarFilaDePedidos()
-
-        // Then
-        val expectedSortedPedidos = pedidos.sortedBy { it.dataRecebimento }
-        assert(result == expectedSortedPedidos)
-    }
-
-    @Test
     fun buscarPedidoPorId_DeveRetornarOPedido() {
         val pedidoId = UUID.randomUUID()
         val pedido = PedidoHelper.gerarPedido()
 
-        `when`(pedidoGatewayPort.buscarPedidoPorId(pedidoId)).thenReturn(Optional.of(pedido))
+        `when`(pedidoGatewayPort.buscarPedidoPorId(pedidoId)).thenReturn(pedido)
 
         val result = pedidoUseCases.buscarPedidoPorId(pedidoId)
 
@@ -119,27 +105,11 @@ class PedidoUseCasesTest {
     fun buscarPedidoPorId_DeveRetornarErroRecursoNaoEncontradoException() {
         val pedidoId = UUID.randomUUID()
 
-        `when`(pedidoGatewayPort.buscarPedidoPorId(pedidoId)).thenReturn(Optional.empty())
+        `when`(pedidoGatewayPort.buscarPedidoPorId(pedidoId)).thenReturn(null)
 
         assertThrows<RecursoNaoEncontradoException> {
             pedidoUseCases.buscarPedidoPorId(pedidoId)
         }
-    }
-
-    @Test
-    fun salvarPedido_DeveSalvarPedido() {
-        val pedidoId = UUID.randomUUID()
-        val pedido = PedidoHelper.gerarPedido()
-        pedido.id = pedidoId
-
-        `when`(pedidoGatewayPort.buscarPedidoPorId(pedidoId)).thenReturn(Optional.of(pedido))
-
-        `when`(pedidoGatewayPort.salvarPedido(pedido)).thenReturn(pedido)
-
-        val result = pedidoUseCases.atualizarStatusPedido(pedido.statusPedido!!, pedido.id!!)
-
-        verify(pedidoGatewayPort).salvarPedido(pedido)
-        assert(result == pedido)
     }
 
     @Test
@@ -150,7 +120,7 @@ class PedidoUseCasesTest {
         pedido.id = pedidoId
 
         // Mocking the behavior of pedidoGatewayPort.buscarPedidoPorId
-        `when`(pedidoGatewayPort.buscarPedidoPorId(pedidoId)).thenReturn(Optional.of(pedido))
+        `when`(pedidoGatewayPort.buscarPedidoPorId(pedidoId)).thenReturn(pedido)
 
         // Mocking the behavior of pedidoGatewayPort.salvarPedido
         `when`(pedidoGatewayPort.salvarPedido(pedido)).thenReturn(pedido)
