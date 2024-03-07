@@ -13,7 +13,7 @@ import tech.challenge.orderservice.domain.exception.AtributoInvalidoException
 import tech.challenge.orderservice.domain.exception.RecursoNaoEncontradoException
 import tech.challenge.orderservice.domain.ports.`in`.PedidoUseCasesPort
 import tech.challenge.orderservice.domain.ports.out.PedidoGatewayPort
-import tech.challenge.orderservice.domain.ports.out.PedidoQueueGatewayPort
+import tech.challenge.orderservice.domain.ports.out.PagamentoQueueAdapterOUTPort
 import tech.challenge.orderservice.domain.ports.out.ProdutoGatewayPort
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -23,7 +23,7 @@ import java.util.*
 open class PedidoUseCases(
     private val pedidoGatewayPort: PedidoGatewayPort,
     private val produtoGatewayPort: ProdutoGatewayPort,
-    private val pedidoQueueGatewayPort: PedidoQueueGatewayPort,
+    private val pagamentoQueueAdapterOUTPort: PagamentoQueueAdapterOUTPort,
     private val pedidoQueueMapper: PedidoQueueMapper,
 ) : PedidoUseCasesPort {
 
@@ -82,7 +82,7 @@ open class PedidoUseCases(
             .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeTypeAdapter())
             .create()
         val pedidoJson = gson.toJson(pedidoSalvo)
-        pedidoQueueGatewayPort.publish(pedidoJson)
+        pagamentoQueueAdapterOUTPort.publish(pedidoJson)
 
         return pedidoSalvo
     }
@@ -91,6 +91,13 @@ open class PedidoUseCases(
         val pedido = buscarPedidoPorId(id)
         pedido.dataAtualizacao = LocalDateTime.now(ZoneId.of("UTC"))
         pedido.statusPedido = statusPedido
+        return pedidoGatewayPort.salvarPedido(pedido)
+    }
+
+    override fun atualizarStatusPagamento(statusPagamento: StatusPagamento, id: UUID): Pedido {
+        val pedido = buscarPedidoPorId(id)
+        pedido.dataAtualizacao = LocalDateTime.now(ZoneId.of("UTC"))
+        pedido.statusPagamento = statusPagamento
         return pedidoGatewayPort.salvarPedido(pedido)
     }
 

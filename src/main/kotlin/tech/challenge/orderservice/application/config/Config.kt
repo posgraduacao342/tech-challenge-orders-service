@@ -7,7 +7,7 @@ import tech.challenge.orderservice.application.gateway.PedidoGateway
 import tech.challenge.orderservice.application.gateway.ProdutoGateway
 import tech.challenge.orderservice.application.presenters.mappers.PedidoQueueMapper
 import tech.challenge.orderservice.application.presenters.mappers.ProdutoMapper
-import tech.challenge.orderservice.domain.ports.out.PedidoQueueGatewayPort
+import tech.challenge.orderservice.domain.ports.out.PagamentoQueueAdapterOUTPort
 import tech.challenge.orderservice.domain.usecases.ItemUseCases
 import tech.challenge.orderservice.domain.usecases.PedidoUseCases
 import tech.challenge.orderservice.domain.usecases.ProdutoUseCases
@@ -24,10 +24,10 @@ class Config {
     fun pedidoUseCasesConfig(
         pedidoGateway: PedidoGateway,
         produtoGateway: ProdutoGateway,
-        pedidoQueueGatewayPort: PedidoQueueGatewayPort,
+        pagamentoQueueAdapterOUTPort: PagamentoQueueAdapterOUTPort,
         pedidoQueueMapper: PedidoQueueMapper,
     ): PedidoUseCases {
-        return PedidoUseCases(pedidoGateway, produtoGateway, pedidoQueueGatewayPort, pedidoQueueMapper)
+        return PedidoUseCases(pedidoGateway, produtoGateway, pagamentoQueueAdapterOUTPort, pedidoQueueMapper)
     }
 
     @Bean

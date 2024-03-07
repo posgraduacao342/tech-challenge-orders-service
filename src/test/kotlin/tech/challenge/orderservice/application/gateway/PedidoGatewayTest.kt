@@ -76,13 +76,13 @@ class PedidoGatewayTest {
         val pedidoEntity = PedidoEntityHelper.gerarPedido()
 
         `when`(pedidoMapper.toEntity(pedido)).thenReturn(pedidoEntity)
-        `when`(pedidoRepository.save(pedidoEntity)).thenReturn(pedidoEntity)
+        `when`(pedidoRepository.saveAndFlush(pedidoEntity)).thenReturn(pedidoEntity)
         `when`(pedidoMapper.toDomain(pedidoEntity)).thenReturn(pedido)
 
         val result = pedidoGateway.salvarPedido(pedido)
 
         verify(pedidoMapper, times(1)).toEntity((pedido))
-        verify(pedidoRepository, times(1)).save((pedidoEntity))
+        verify(pedidoRepository, times(1)).saveAndFlush((pedidoEntity))
         verify(pedidoMapper, times(1)).toDomain((pedidoEntity))
         Assertions.assertEquals(pedido, result)
     }

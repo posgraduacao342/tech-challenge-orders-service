@@ -5,18 +5,18 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
-import tech.challenge.orderservice.domain.ports.out.PedidoQueueGatewayPort
+import tech.challenge.orderservice.domain.ports.out.PagamentoQueueAdapterOUTPort
 
 @Service
-class PedidoQueueAdapterOUT(
+class PagamentoQueueAdapterOUT(
     @Autowired private val rabbitTemplate: RabbitTemplate,
     @Value("\${queue1.name}") private val pedidos: String
-): PedidoQueueGatewayPort {
+): PagamentoQueueAdapterOUTPort {
 
     private val logger = LoggerFactory.getLogger(this.javaClass)
 
     override fun publish(message: String) {
         rabbitTemplate.convertAndSend(pedidos, message)
-        logger.info("PUBLICADO NA FILA COM SUCESSO!!!")
+        logger.info("Publicado na fila com sucesso!")
     }
 }

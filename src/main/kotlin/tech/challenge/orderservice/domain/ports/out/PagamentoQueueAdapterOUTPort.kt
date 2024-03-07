@@ -1,5 +1,5 @@
 package tech.challenge.orderservice.domain.ports.out
 
-interface PedidoQueueGatewayPort {
+interface PagamentoQueueAdapterOUTPort {
     fun publish(message: String)
 }

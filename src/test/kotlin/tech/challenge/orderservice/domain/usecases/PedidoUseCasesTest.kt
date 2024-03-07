@@ -17,7 +17,7 @@ import tech.challenge.orderservice.domain.enums.StatusPedido
 import tech.challenge.orderservice.domain.exception.AtributoInvalidoException
 import tech.challenge.orderservice.domain.exception.RecursoNaoEncontradoException
 import tech.challenge.orderservice.domain.ports.out.PedidoGatewayPort
-import tech.challenge.orderservice.domain.ports.out.PedidoQueueGatewayPort
+import tech.challenge.orderservice.domain.ports.out.PagamentoQueueAdapterOUTPort
 import tech.challenge.orderservice.domain.ports.out.ProdutoGatewayPort
 import tech.challenge.orderservice.helpers.PedidoHelper
 import tech.challenge.orderservice.helpers.ProdutoHelper
@@ -32,7 +32,7 @@ class PedidoUseCasesTest {
     private lateinit var produtoGatewayPort: ProdutoGatewayPort
 
     @Mock
-    private lateinit var pedidoQueueGatewayPort: PedidoQueueGatewayPort
+    private lateinit var pagamentoQueueAdapterOUTPort: PagamentoQueueAdapterOUTPort
 
     @Mock
     private lateinit var pedidoQueueMapper: PedidoQueueMapper

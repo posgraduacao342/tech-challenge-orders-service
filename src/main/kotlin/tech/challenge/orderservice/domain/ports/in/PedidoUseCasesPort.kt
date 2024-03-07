@@ -4,6 +4,7 @@ import tech.challenge.orderservice.domain.enums.PedidoSortingOptions
 import java.util.*
 import org.springframework.data.domain.Sort
 import tech.challenge.orderservice.domain.entities.Pedido
+import tech.challenge.orderservice.domain.enums.StatusPagamento
 import tech.challenge.orderservice.domain.enums.StatusPedido
 import tech.challenge.orderservice.domain.exception.RecursoNaoEncontradoException
 
@@ -17,6 +18,8 @@ interface PedidoUseCasesPort {
 
     @Throws(RecursoNaoEncontradoException::class)
     fun atualizarStatusPedido(statusPedido: StatusPedido, id: UUID): Pedido
+
+    fun atualizarStatusPagamento(statusPagamento: StatusPagamento, id: UUID): Pedido
 
     fun deletarPedido(id: UUID)
 }
