@@ -10,13 +10,14 @@ import tech.challenge.orderservice.domain.ports.out.PagamentoQueueAdapterOUTPort
 @Service
 class PagamentoQueueAdapterOUT(
     @Autowired private val rabbitTemplate: RabbitTemplate,
-    @Value("\${queue1.name}") private val pedidos: String
+    @Value("novo.pedido") private val routingKey: String,
+    @Value("amq.direct") private val exchange: String,
 ): PagamentoQueueAdapterOUTPort {
 
     private val logger = LoggerFactory.getLogger(this.javaClass)
 
     override fun publish(message: String) {
-        rabbitTemplate.convertAndSend(pedidos, message)
+        rabbitTemplate.convertAndSend(exchange,routingKey, message)
         logger.info("Publicado na fila com sucesso!")
     }
 }
