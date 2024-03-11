@@ -25,10 +25,9 @@ class PagamentoQueueAdapterIN(
 ) : PagamentoQueueAdapterINPort {
     private val logger = LoggerFactory.getLogger(this.javaClass)
     private val pagamentoAtualizado = "Atualizado status do pagamento!"
-    private val pedidoAtualizado = "Atualizado status do pagamento!"
+    private val pedidoAtualizado = "Atualizado status do pedido!"
 
-    @RabbitListener(queues = ["\${queue3.name}"])
-    @Throws(RecursoNaoEncontradoException::class)
+    @RabbitListener(queues = ["order_pagamento_aprovado"])
     override fun receivePagamentoAprovado(@Payload message: String, @Header(AmqpHeaders.DELIVERY_TAG) deliveryTag: Long) {
         try {
             val mensagem = gson.fromJson<HashMap<String, String>>(message, HashMap::class.java)
@@ -53,7 +52,7 @@ class PagamentoQueueAdapterIN(
         }
     }
 
-    @RabbitListener(queues = ["\${queue4.name}"])
+    @RabbitListener(queues = ["order_pagamento_estornado"])
     @Throws(RecursoNaoEncontradoException::class)
     override fun receivePagamentoEstornado(@Payload message: String, @Header(AmqpHeaders.DELIVERY_TAG) deliveryTag: Long) {
         try {
@@ -84,7 +83,7 @@ class PagamentoQueueAdapterIN(
         }
     }
 
-    @RabbitListener(queues = ["\${queue5.name}"])
+    @RabbitListener(queues = ["order_pagamento_nao_aprovado"])
     @Throws(RecursoNaoEncontradoException::class)
     override fun receivePagamentoNaoAprovado(@Payload message: String, @Header(AmqpHeaders.DELIVERY_TAG) deliveryTag: Long) {
         try {
