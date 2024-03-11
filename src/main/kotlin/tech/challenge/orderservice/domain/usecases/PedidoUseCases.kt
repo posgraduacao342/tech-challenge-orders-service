@@ -1,23 +1,33 @@
 package tech.challenge.orderservice.domain.usecases
 
-import tech.challenge.orderservice.domain.enums.PedidoSortingOptions
-import java.util.*
+import com.google.gson.GsonBuilder
+import jakarta.transaction.Transactional
+import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Sort
+import tech.challenge.orderservice.application.presenters.mappers.PedidoQueueMapper
 import tech.challenge.orderservice.domain.entities.Pedido
+import tech.challenge.orderservice.domain.enums.PedidoSortingOptions
 import tech.challenge.orderservice.domain.enums.StatusPagamento
 import tech.challenge.orderservice.domain.enums.StatusPedido
 import tech.challenge.orderservice.domain.exception.AtributoInvalidoException
 import tech.challenge.orderservice.domain.exception.RecursoNaoEncontradoException
 import tech.challenge.orderservice.domain.ports.`in`.PedidoUseCasesPort
 import tech.challenge.orderservice.domain.ports.out.PedidoGatewayPort
+import tech.challenge.orderservice.domain.ports.out.PagamentoQueueAdapterOUTPort
 import tech.challenge.orderservice.domain.ports.out.ProdutoGatewayPort
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.util.*
 
-class PedidoUseCases(
+
+open class PedidoUseCases(
     private val pedidoGatewayPort: PedidoGatewayPort,
-    private val produtoGatewayPort: ProdutoGatewayPort
+    private val produtoGatewayPort: ProdutoGatewayPort,
+    private val pagamentoQueueAdapterOUTPort: PagamentoQueueAdapterOUTPort,
+    private val pedidoQueueMapper: PedidoQueueMapper,
 ) : PedidoUseCasesPort {
+
+    private val logger = LoggerFactory.getLogger(this.javaClass)
 
     override fun buscarPedidos(
             sortingProperty: Optional<PedidoSortingOptions>,
@@ -26,24 +36,12 @@ class PedidoUseCases(
         return pedidoGatewayPort.buscarPedidos(sortingProperty, direction)
     }
 
-    override fun buscarFilaDePedidos(): List<Pedido> {
-        val statusPedidoList = listOf(StatusPedido.PRONTO, StatusPedido.EM_PREPARACAO, StatusPedido.RECEBIDO)
-
-        val orders = listOf(Sort.Order(Sort.Direction.DESC, PedidoSortingOptions.DATA_RECEBIMENTO.string))
-
-        val pedidos = pedidoGatewayPort.buscarPedidosPorStatusPedido(statusPedidoList, Sort.by(orders))
-        return ordenarPedidosPorStatus(pedidos)
-    }
-
-    private fun ordenarPedidosPorStatus(pedidos: List<Pedido>): List<Pedido> {
-        return pedidos.sortedBy { it.statusPedido }
-    }
-
     override fun buscarPedidoPorId(id: UUID): Pedido {
         return pedidoGatewayPort.buscarPedidoPorId(id)
-                .orElseThrow { RecursoNaoEncontradoException("Registro não encontrado com código $id") }
+            ?: throw RecursoNaoEncontradoException("Registro não encontrado com código $id")
     }
 
+    @Transactional
     override fun salvarPedido(pedido: Pedido): Pedido {
         pedido.dataCriacao = LocalDateTime.now(ZoneId.of("UTC"))
         pedido.dataAtualizacao = LocalDateTime.now(ZoneId.of("UTC"))
@@ -52,8 +50,12 @@ class PedidoUseCases(
             pedido.statusPagamento = StatusPagamento.AGUARDANDO_PAGAMENTO
         }
         if (pedido.statusPedido == null) {
-            pedido.statusPedido = StatusPedido.NAO_RECEBIDO
+            pedido.statusPedido = StatusPedido.CRIADO
         }
+        if (pedido.metodoPagamento == null) {
+            throw AtributoInvalidoException("Metodo de pagamento deve ser preenchido!")
+        }
+
 
         val ids = pedido.itens.map { it.produto?.id }
         val produtos = produtoGatewayPort.buscarProdutoPorIds(ids)
@@ -74,13 +76,28 @@ class PedidoUseCases(
             throw AtributoInvalidoException("Preço informado está incorreto!")
         }
 
-        return pedidoGatewayPort.salvarPedido(pedido)
+        val pedidoSalvo = pedidoGatewayPort.salvarPedido(pedido)
+
+        val gson = GsonBuilder()
+            .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeTypeAdapter())
+            .create()
+        val pedidoJson = gson.toJson(pedidoSalvo)
+        pagamentoQueueAdapterOUTPort.publish(pedidoJson)
+
+        return pedidoSalvo
     }
 
     override fun atualizarStatusPedido(statusPedido: StatusPedido, id: UUID): Pedido {
         val pedido = buscarPedidoPorId(id)
         pedido.dataAtualizacao = LocalDateTime.now(ZoneId.of("UTC"))
         pedido.statusPedido = statusPedido
+        return pedidoGatewayPort.salvarPedido(pedido)
+    }
+
+    override fun atualizarStatusPagamento(statusPagamento: StatusPagamento, id: UUID): Pedido {
+        val pedido = buscarPedidoPorId(id)
+        pedido.dataAtualizacao = LocalDateTime.now(ZoneId.of("UTC"))
+        pedido.statusPagamento = statusPagamento
         return pedidoGatewayPort.salvarPedido(pedido)
     }
 

@@ -27,11 +27,6 @@ class PedidoController(
         return pedidoUseCases.buscarPedidos(Optional.ofNullable(sortingProperty), Optional.ofNullable(direction))
     }
 
-    @GetMapping("/fila")
-    fun buscarFilaDePedidos(): List<Pedido> {
-        return pedidoUseCases.buscarFilaDePedidos()
-    }
-
     @GetMapping("/{pedidoId}")
     fun buscarPedidoPorId(@PathVariable pedidoId: UUID): Pedido {
         return pedidoUseCases.buscarPedidoPorId(pedidoId)

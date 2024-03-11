@@ -15,7 +15,7 @@ class AtualizarPedidoRequestTest {
 
     @Test
     fun atualizarPedidoRequestAtribuindoValores() {
-        val statusPedido = StatusPedido.EM_PREPARACAO
+        val statusPedido = StatusPedido.CRIADO
 
         // When
         val atualizarPedidoRequest = AtualizarPedidoRequest(
@@ -31,9 +31,9 @@ class AtualizarPedidoRequestTest {
         val atualizarPedidoRequest = AtualizarPedidoRequest()
 
         val novaAtualizarPedidoRequest = atualizarPedidoRequest.copy(
-            statusPedido = StatusPedido.PRONTO
+            statusPedido = StatusPedido.CRIADO
         )
 
-        Assertions.assertEquals(StatusPedido.PRONTO, novaAtualizarPedidoRequest.statusPedido)
+        Assertions.assertEquals(StatusPedido.CRIADO, novaAtualizarPedidoRequest.statusPedido)
     }
 }

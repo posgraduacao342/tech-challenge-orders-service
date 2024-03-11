@@ -10,5 +10,6 @@ CREATE TABLE pedidos (
                          data_criacao timestamptz NOT NULL DEFAULT now(),
                          data_delecao timestamptz,
                          data_atualizacao timestamptz NOT NULL DEFAULT now(),
+                         metodo_pagamento varchar(50) NOT NULL,
                          CONSTRAINT pedidos_pkey PRIMARY KEY (id)
 )

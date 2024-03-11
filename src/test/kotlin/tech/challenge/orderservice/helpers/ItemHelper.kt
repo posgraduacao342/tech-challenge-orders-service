@@ -52,7 +52,7 @@ class ItemHelper {
                 ),
                 pedido = Pedido(
                     idCliente = UUID.randomUUID(),
-                    statusPedido = StatusPedido.EM_PREPARACAO,
+                    statusPedido = StatusPedido.CRIADO,
                     preco = 10.00.toBigDecimal(),
                     statusPagamento = StatusPagamento.AGUARDANDO_PAGAMENTO,
                     itens = gerarListItens(),

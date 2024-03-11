@@ -5,7 +5,9 @@ import org.springframework.context.annotation.Configuration
 import tech.challenge.orderservice.application.gateway.ItemGateway
 import tech.challenge.orderservice.application.gateway.PedidoGateway
 import tech.challenge.orderservice.application.gateway.ProdutoGateway
+import tech.challenge.orderservice.application.presenters.mappers.PedidoQueueMapper
 import tech.challenge.orderservice.application.presenters.mappers.ProdutoMapper
+import tech.challenge.orderservice.domain.ports.out.PagamentoQueueAdapterOUTPort
 import tech.challenge.orderservice.domain.usecases.ItemUseCases
 import tech.challenge.orderservice.domain.usecases.PedidoUseCases
 import tech.challenge.orderservice.domain.usecases.ProdutoUseCases
@@ -21,9 +23,11 @@ class Config {
     @Bean
     fun pedidoUseCasesConfig(
         pedidoGateway: PedidoGateway,
-        produtoGateway: ProdutoGateway
+        produtoGateway: ProdutoGateway,
+        pagamentoQueueAdapterOUTPort: PagamentoQueueAdapterOUTPort,
+        pedidoQueueMapper: PedidoQueueMapper,
     ): PedidoUseCases {
-        return PedidoUseCases(pedidoGateway, produtoGateway)
+        return PedidoUseCases(pedidoGateway, produtoGateway, pagamentoQueueAdapterOUTPort, pedidoQueueMapper)
     }
 
     @Bean

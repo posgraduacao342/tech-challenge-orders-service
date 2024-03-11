@@ -1,5 +1,6 @@
 package tech.challenge.orderservice.domain.entities
 
+import tech.challenge.orderservice.domain.enums.MetodoPagamento
 import tech.challenge.orderservice.domain.enums.StatusPagamento
 import tech.challenge.orderservice.domain.enums.StatusPedido
 import java.math.BigDecimal
@@ -13,6 +14,7 @@ data class Pedido(
     var statusPagamento: StatusPagamento? = null,
     var itens: MutableList<Item> = mutableListOf(),
     var dataRecebimento: LocalDateTime? = null,
+    var metodoPagamento: MetodoPagamento? = null
 
     ) : BaseEntity() {
 
@@ -32,7 +34,7 @@ data class Pedido(
 
     fun atualizarStatusPedido(statusPagamento: StatusPagamento) {
         if (statusPagamento == StatusPagamento.PAGO) {
-            this.statusPedido = StatusPedido.RECEBIDO
+            this.statusPedido = StatusPedido.CRIADO
         }
         this.statusPagamento = statusPagamento
         this.dataRecebimento = LocalDateTime.now()

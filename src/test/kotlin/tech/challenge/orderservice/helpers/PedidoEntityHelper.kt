@@ -11,7 +11,7 @@ class PedidoEntityHelper {
 
         fun gerarPedido(): PedidoEntity {
             return PedidoEntity().apply {
-                statusPedido = StatusPedido.EM_PREPARACAO
+                statusPedido = StatusPedido.CRIADO
                 itens = ItemEntityHelper.gerarListItens()
                 preco = 10.00.toBigDecimal()
                 dataRecebimento = LocalDateTime.now()
@@ -22,7 +22,7 @@ class PedidoEntityHelper {
 
         fun gerarPedidoComItensVazio(): PedidoEntity {
             return PedidoEntity().apply {
-                statusPedido = StatusPedido.EM_PREPARACAO
+                statusPedido = StatusPedido.CRIADO
                 itens = mutableListOf()
                 preco = 10.00.toBigDecimal()
                 dataRecebimento = LocalDateTime.now()

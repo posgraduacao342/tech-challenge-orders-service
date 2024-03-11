@@ -25,7 +25,7 @@ class PedidoRepositoryTest {
     @Test
     fun findByStatusPedidoIn_DeveRetornarListaDePedidos() {
         // Given
-        val statusPedidoList = listOf(StatusPedido.PRONTO, StatusPedido.EM_PREPARACAO, StatusPedido.RECEBIDO)
+        val statusPedidoList = listOf(StatusPedido.CRIADO, StatusPedido.CRIADO, StatusPedido.CRIADO)
         val pedidos = PedidoEntityHelper.gerarListPedidos()
 
         pedidoRepository.saveAll(pedidos)

@@ -10,7 +10,7 @@ class ItemEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: UUID? = null
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_produto")
     var produto: ProdutoEntity? = null
 
