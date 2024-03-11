@@ -105,6 +105,12 @@ class PagamentoQueueAdapterIN(
             rabbitTemplate.execute { channel ->
                 channel.basicReject(deliveryTag, false)
             }
+        } catch (ex: Exception) {
+            logger.error("Ocorreu um erro ao processar a mensagem: $message", ex)
+
+            rabbitTemplate.execute { channel ->
+                channel.basicReject(deliveryTag, false)
+            }
         }
     }
 }
