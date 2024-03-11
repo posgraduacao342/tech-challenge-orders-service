@@ -58,21 +58,18 @@ jobs:
           aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }} --profile ecr-user
           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }} --profile ecr-user
 
-          # Adicione esta parte para incluir a sessão
-          aws configure set aws_session_token ${{ secrets.AWS_SESSION_TOKEN }} --profile ecr-user
-
           aws configure set region us-east-1 --profile ecr-user
-          aws ecr get-login-password --region us-east-1 --profile ecr-user | docker login --username AWS --password-stdin 637423603914.dkr.ecr.us-east-1.amazonaws.com
+          aws ecr get-login-password --region us-east-1 --profile ecr-user | docker login --username AWS --password-stdin 767397892937.dkr.ecr.us-east-1.amazonaws.com/order-service
 
       - name: Build Docker Image
         id: build-image
         run: |
-          docker build -t 637423603914.dkr.ecr.us-east-1.amazonaws.com/order-service:latest -f Dockerfile .
-          docker tag 637423603914.dkr.ecr.us-east-1.amazonaws.com/order-service:latest 637423603914.dkr.ecr.us-east-1.amazonaws.com/order-service:latest
+          docker build -t 767397892937.dkr.ecr.us-east-1.amazonaws.com/order-service/order-service:latest -f Dockerfile .
+          docker tag 767397892937.dkr.ecr.us-east-1.amazonaws.com/order-service/order-service:latest 767397892937.dkr.ecr.us-east-1.amazonaws.com/order-service/order-service:latest
 
       - name: Push Docker Image to ECR
         run: |
-          docker push 637423603914.dkr.ecr.us-east-1.amazonaws.com/order-service:latest
+          docker push 767397892937.dkr.ecr.us-east-1.amazonaws.com/order-service/order-service:latest
 
   deploy:
     name: Deploy to Kubernetes
@@ -83,9 +80,33 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
+      
+      - name: Set up environment variables
+        run: |
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> $GITHUB_ENV
+          echo "USERNAME=${{ secrets.USERNAME }}" >> $GITHUB_ENV
+          echo "PASSWORD=${{ secrets.PASSWORD }}" >> $GITHUB_ENV
+          echo "RMQ_URI=${{ secrets.RMQ_URI }}" >> $GITHUB_ENV
+          echo "RMQ_USER=${{ secrets.RMQ_USER }}" >> $GITHUB_ENV
+          echo "RMQ_PASS=${{ secrets.RMQ_PASS }}" >> $GITHUB_ENV
+
+      - name: Generate pipeline/application/secret.yaml
+        run: |
+          echo "apiVersion: v1" > pipeline/application/secret.yaml
+          echo "kind: Secret" >> pipeline/application/secret.yaml
+          echo "metadata:" >> pipeline/application/secret.yaml
+          echo "  name: tech-challenge-order-secret" >> pipeline/application/secret.yaml
+          echo "type: Opaque" >> pipeline/application/secret.yaml
+          echo "data:" >> pipeline/application/secret.yaml
+          echo "  DATABASE_URL: $DATABASE_URL" >> pipeline/application/secret.yaml
+          echo "  USERNAME: $USERNAME" >> pipeline/application/secret.yaml
+          echo "  PASSWORD: $PASSWORD" >> pipeline/application/secret.yaml
+          echo "  RMQ_URI: $RMQ_URI" >> pipeline/application/secret.yaml
+          echo "  RMQ_USER: $RMQ_USER" >> pipeline/application/secret.yaml
+          echo "  RMQ_PASS: $RMQ_PASS" >> pipeline/application/secret.yaml
 
       - name: Configure AWS Credentials
-        run: aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }} && aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }} && aws configure set aws_session_token ${{ secrets.AWS_SESSION_TOKEN }}
+        run: aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }} && aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         env:
           AWS_DEFAULT_REGION: us-east-1
 
