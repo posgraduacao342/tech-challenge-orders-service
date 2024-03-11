@@ -74,18 +74,14 @@ class PedidoUseCasesTest {
 
     @Test
     fun buscarPedidos_DeveRetornarListaDePedidos() {
-        // Given
         val sortingProperty = Optional.of(PedidoSortingOptions.DATA_RECEBIMENTO)
         val direction = Optional.of(Sort.Direction.ASC)
         val pedidos = PedidoHelper.gerarListPedidos()
 
-        // Mocking the behavior of pedidoGatewayPort.buscarPedidos
         `when`(pedidoGatewayPort.buscarPedidos(sortingProperty, direction)).thenReturn(pedidos)
 
-        // When
         val result = pedidoUseCases.buscarPedidos(sortingProperty, direction)
 
-        // Then
         assert(result == pedidos)
     }
 
@@ -119,29 +115,39 @@ class PedidoUseCasesTest {
         val pedido = PedidoHelper.gerarPedido()
         pedido.id = pedidoId
 
-        // Mocking the behavior of pedidoGatewayPort.buscarPedidoPorId
         `when`(pedidoGatewayPort.buscarPedidoPorId(pedidoId)).thenReturn(pedido)
 
-        // Mocking the behavior of pedidoGatewayPort.salvarPedido
         `when`(pedidoGatewayPort.salvarPedido(pedido)).thenReturn(pedido)
 
-        // When
         val result = pedidoUseCases.atualizarStatusPedido(pedido.statusPedido!!, pedido.id!!)
 
-        // Then
+        verify(pedidoGatewayPort).salvarPedido(pedido)
+        assert(result == pedido)
+    }
+
+    @Test
+    fun atualizarStatusPagamento_DeveRetornarPedidoAtualizado() {
+        val pedidoId = UUID.randomUUID()
+        val pedidoPagamento = StatusPagamento.PAGO
+        val pedido = PedidoHelper.gerarPedido()
+        pedido.id = pedidoId
+        pedido.statusPagamento = pedidoPagamento
+
+        `when`(pedidoGatewayPort.buscarPedidoPorId(pedidoId)).thenReturn(pedido)
+        `when`(pedidoGatewayPort.salvarPedido(pedido)).thenReturn(pedido)
+
+        val result = pedidoUseCases.atualizarStatusPagamento(pedido.statusPagamento!!, pedido.id!!)
+
         verify(pedidoGatewayPort).salvarPedido(pedido)
         assert(result == pedido)
     }
 
     @Test
     fun deletarPedido_DeveDeletarUmPedido() {
-        // Given
         val pedidoId = UUID.randomUUID()
 
-        // When
         pedidoUseCases.deletarPedido(pedidoId)
 
-        // Then
         verify(pedidoGatewayPort).deletarPedido(pedidoId)
     }
 }
