@@ -39,6 +39,21 @@ spec:
                 secretKeyRef:
                   name: tech-challenge-order-secret
                   key: PASSWORD
+            - name: RMQ_URI
+              valueFrom:
+                secretKeyRef:
+                  name: tech-challenge-order-secret
+                  key: RMQ_URI
+            - name: RMQ_USER
+              valueFrom:
+                secretKeyRef:
+                  name: tech-challenge-order-secret
+                  key: RMQ_USER
+            - name: RMQ_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: tech-challenge-order-secret
+                  key: RMQ_PASS
   replicas: 2
   selector:
     matchLabels:
