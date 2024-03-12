@@ -29,7 +29,7 @@ data class PedidoEntity(
     var dataRecebimento: LocalDateTime?,
 
     @Column
-    var idCliente: UUID?,
+    var clienteId: UUID?,
 
     @Column(nullable = false)
     var metodoPagamento: MetodoPagamento?
@@ -46,7 +46,7 @@ data class PedidoEntity(
         itens = mutableListOf(),
         preco = null,
         dataRecebimento = null,
-        idCliente = null,
+        clienteId = null,
         metodoPagamento = null
     )
 

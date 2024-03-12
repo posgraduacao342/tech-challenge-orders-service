@@ -13,7 +13,7 @@ class PedidoHelper {
     companion object {
         fun gerarPedido(): Pedido {
             return Pedido(
-                idCliente = UUID.randomUUID(),
+                clienteId = UUID.randomUUID(),
                 statusPedido = StatusPedido.CRIADO,
                 preco = 10.00.toBigDecimal(),
                 statusPagamento = StatusPagamento.AGUARDANDO_PAGAMENTO,
@@ -25,7 +25,7 @@ class PedidoHelper {
 
         fun gerarPedidoPrecoZerado(): Pedido {
             return Pedido(
-                idCliente = UUID.randomUUID(),
+                clienteId = UUID.randomUUID(),
                 statusPedido = StatusPedido.CRIADO,
                 preco = 0.toBigDecimal(),
                 statusPagamento = StatusPagamento.AGUARDANDO_PAGAMENTO,
@@ -37,7 +37,7 @@ class PedidoHelper {
 
         fun gerarPedidoComItensVazio(): Pedido {
             return Pedido(
-                idCliente = UUID.randomUUID(),
+                clienteId = UUID.randomUUID(),
                 statusPedido = StatusPedido.CRIADO,
                 preco = 10.00.toBigDecimal(),
                 statusPagamento = StatusPagamento.AGUARDANDO_PAGAMENTO,
@@ -53,7 +53,7 @@ class PedidoHelper {
 
         fun gerarPedidoRequest(): CriarPedidoRequest{
             return CriarPedidoRequest(
-                idCliente = null,
+                clienteId = null,
                 preco = null,
                 itens = null,
                 metodoPagamento = null

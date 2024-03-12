@@ -51,7 +51,7 @@ class ItemHelper {
                     categoria = Categoria.LANCHE
                 ),
                 pedido = Pedido(
-                    idCliente = UUID.randomUUID(),
+                    clienteId = UUID.randomUUID(),
                     statusPedido = StatusPedido.CRIADO,
                     preco = 10.00.toBigDecimal(),
                     statusPagamento = StatusPagamento.AGUARDANDO_PAGAMENTO,

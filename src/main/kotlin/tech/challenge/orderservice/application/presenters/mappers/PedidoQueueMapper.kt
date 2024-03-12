@@ -9,7 +9,7 @@ import java.util.HashMap
 class PedidoQueueMapper {
     fun toPedidoMessage(pedido: Pedido): String {
         val message = HashMap<String, String>()
-        message["idCliente"] = pedido.idCliente.toString()
+        message["idCliente"] = pedido.clienteId.toString()
         message["statusPedido"] = pedido.statusPedido.toString()
         message["preco"] = pedido.preco.toString()
         message["statusPagamento"] = pedido.statusPagamento.toString()

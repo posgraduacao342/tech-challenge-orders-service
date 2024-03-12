@@ -77,7 +77,7 @@ class PedidoMapper(
             pedidoResponse.adicionarItem(itemResponse)
         }
 
-        if(pedido.idCliente != null) {
+        if(pedido.clienteId != null) {
             pedidoResponse.clienteId = pedido.id
         }
 
