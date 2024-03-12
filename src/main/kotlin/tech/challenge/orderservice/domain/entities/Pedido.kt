@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 import java.util.*
 
 data class Pedido(
-    var idCliente: UUID? = null,
+    var clienteId: UUID? = null,
     var statusPedido: StatusPedido? = null,
     var preco: BigDecimal? = null,
     var statusPagamento: StatusPagamento? = null,

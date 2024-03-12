@@ -12,7 +12,7 @@ class CriarPedidoRequestTest {
     fun criarPedidoRequestValoresPadrao() {
         val criarPedidoRequest = CriarPedidoRequest()
 
-        Assertions.assertEquals(null, criarPedidoRequest.idCliente)
+        Assertions.assertEquals(null, criarPedidoRequest.clienteId)
         Assertions.assertEquals(null, criarPedidoRequest.preco)
         Assertions.assertEquals(null, criarPedidoRequest.itens)
     }
@@ -25,13 +25,13 @@ class CriarPedidoRequestTest {
 
         // When
         val atualizarPedidoRequest = CriarPedidoRequest(
-            idCliente = idCliente,
+            clienteId = idCliente,
             preco = preco,
             itens = mutableListOf(itens,itens)
         )
 
         // Then
-        Assertions.assertEquals(idCliente, atualizarPedidoRequest.idCliente)
+        Assertions.assertEquals(idCliente, atualizarPedidoRequest.clienteId)
         Assertions.assertEquals(preco, atualizarPedidoRequest.preco)
         Assertions.assertEquals(2, atualizarPedidoRequest.itens!!.size)
         Assertions.assertEquals(itens, atualizarPedidoRequest.itens!![1])
@@ -44,12 +44,12 @@ class CriarPedidoRequestTest {
         val criarPedidoRequest = CriarPedidoRequest()
 
         val novoCriarPedidoRequest = criarPedidoRequest.copy(
-            idCliente = id,
+            clienteId = id,
             preco = BigDecimal.valueOf(100.0),
             itens = listOf(itens)
         )
 
-        Assertions.assertEquals(id, novoCriarPedidoRequest.idCliente)
+        Assertions.assertEquals(id, novoCriarPedidoRequest.clienteId)
         Assertions.assertEquals(BigDecimal.valueOf(100.0), novoCriarPedidoRequest.preco)
         Assertions.assertEquals(listOf(itens), novoCriarPedidoRequest.itens)
     }

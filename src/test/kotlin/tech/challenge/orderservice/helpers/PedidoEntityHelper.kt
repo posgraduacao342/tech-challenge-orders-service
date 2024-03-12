@@ -15,7 +15,7 @@ class PedidoEntityHelper {
                 itens = ItemEntityHelper.gerarListItens()
                 preco = 10.00.toBigDecimal()
                 dataRecebimento = LocalDateTime.now()
-                idCliente = UUID.randomUUID()
+                clienteId = UUID.randomUUID()
                 id = UUID.randomUUID()
             }
         }
@@ -26,7 +26,7 @@ class PedidoEntityHelper {
                 itens = mutableListOf()
                 preco = 10.00.toBigDecimal()
                 dataRecebimento = LocalDateTime.now()
-                idCliente = UUID.randomUUID()
+                clienteId = UUID.randomUUID()
                 id = UUID.randomUUID()
             }
         }

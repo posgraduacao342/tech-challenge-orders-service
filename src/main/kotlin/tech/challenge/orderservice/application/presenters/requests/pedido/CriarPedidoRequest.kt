@@ -7,7 +7,7 @@ import java.util.UUID
 
 data class CriarPedidoRequest(
 
-        var idCliente: UUID? = null,
+        var clienteId: UUID? = null,
 
         var preco: BigDecimal? = null,
 
