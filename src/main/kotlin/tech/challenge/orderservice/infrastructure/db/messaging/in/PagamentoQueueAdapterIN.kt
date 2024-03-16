@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.messaging.handler.annotation.Header
 import org.springframework.messaging.handler.annotation.Payload
 import org.springframework.stereotype.Service
+import tech.challenge.orderservice.application.config.RabbitMQConfig
 import tech.challenge.orderservice.domain.enums.StatusPagamento
 import tech.challenge.orderservice.domain.enums.StatusPedido
 import tech.challenge.orderservice.domain.exception.RecursoNaoEncontradoException
@@ -27,7 +28,7 @@ class PagamentoQueueAdapterIN(
     private val pagamentoAtualizado = "Atualizado status do pagamento!"
     private val pedidoAtualizado = "Atualizado status do pedido!"
 
-    @RabbitListener(queues = ["order_pagamento_aprovado"])
+    @RabbitListener(queues = [RabbitMQConfig.ORDER_PAGAMENTO_APROVADO])
     override fun receivePagamentoAprovado(@Payload message: String, @Header(AmqpHeaders.DELIVERY_TAG) deliveryTag: Long) {
         try {
             val mensagem = gson.fromJson<HashMap<String, String>>(message, HashMap::class.java)
@@ -52,7 +53,7 @@ class PagamentoQueueAdapterIN(
         }
     }
 
-    @RabbitListener(queues = ["order_pagamento_estornado"])
+    @RabbitListener(queues = [RabbitMQConfig.ORDER_PAGAMENTO_ESTORNADO])
     @Throws(RecursoNaoEncontradoException::class)
     override fun receivePagamentoEstornado(@Payload message: String, @Header(AmqpHeaders.DELIVERY_TAG) deliveryTag: Long) {
         try {
@@ -83,7 +84,7 @@ class PagamentoQueueAdapterIN(
         }
     }
 
-    @RabbitListener(queues = ["order_pagamento_nao_aprovado"])
+    @RabbitListener(queues = [RabbitMQConfig.ORDER_PAGAMENTO_NAO_APROVADO])
     @Throws(RecursoNaoEncontradoException::class)
     override fun receivePagamentoNaoAprovado(@Payload message: String, @Header(AmqpHeaders.DELIVERY_TAG) deliveryTag: Long) {
         try {
