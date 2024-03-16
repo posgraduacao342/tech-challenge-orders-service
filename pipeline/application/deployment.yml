@@ -25,10 +25,7 @@ spec:
               memory: "256Mi"
           env:
             - name: RMQ_PORT
-              valueFrom:
-                secretKeyRef:
-                  name: tech-challenge-queue-secret
-                  key: RMQ_PORT
+              valueFrom: 5671
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
