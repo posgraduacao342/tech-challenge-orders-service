@@ -56,7 +56,7 @@ class RabbitMQConfig {
 
     @Bean
     fun pagamentoNaoAprovadoQueueBinding(): Binding {
-        return BindingBuilder.bind(pagamentoEstornadoQueue()).to(exchange())
+        return BindingBuilder.bind(pagamentoNaoAprovadoQueue()).to(exchange())
             .with(ORDER_PAGAMENTO_NAO_APROVADO_ROUTING_KEY)
     }
 
