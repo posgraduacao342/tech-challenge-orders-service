@@ -17,7 +17,7 @@ class RabbitMQConfig {
         const val AMQ_DIRECT_EXCHANGE: String = "amq.direct"
         const val ORDER_PAGAMENTO_APROVADO: String = "order_pagamento_aprovado"
         const val ORDER_PAGAMENTO_APROVADO_ROUTING_KEY: String = "pagamento.aprovado"
-        const val ORDER_PAGAMENTO_ESTORNADO: String = "order_pagamento_estornado2"
+        const val ORDER_PAGAMENTO_ESTORNADO: String = "order_pagamento_estornado"
         const val ORDER_PAGAMENTO_ESTORNADO_ROUTING_KEY: String = "pagamento.estornado"
         const val ORDER_PAGAMENTO_NAO_APROVADO: String = "order_pagamento_nao_aprovado"
         const val ORDER_PAGAMENTO_NAO_APROVADO_ROUTING_KEY: String = "pagamento.rejeitado"
